@@ -6,7 +6,7 @@
 const decide = (history = []) => {
   return history.length == 0 ? true : (() => {
     const lastChild = history.length - 1;
-    return history[lastChild].theirs == true ? history[lastChild].yours : !history[lastChild].yours
+    return history[lastChild].theirs;
   })()
 }
 
@@ -22,6 +22,10 @@ const decide = (history = []) => {
 //     const lastChild = history.length - 1;
 //     history[lastChild].theirs == true ? history[lastChild].yours : !history[lastChild].yours
 //   }
+// }
+
+// const copyKitten = (history = []) => {
+//   return
 // }
 
 module.exports = decide;
