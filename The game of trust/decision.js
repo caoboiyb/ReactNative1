@@ -6,10 +6,7 @@
 const decide = (history = []) => {
   return history.length == 0 ? true : (() => {
     const lastChild = history.length - 1;
-    const secondLastChild = history.length - 2;
-    if (history[lastChild].theirs == false && history[secondLastChild] == false){
-      return false
-    } else return history[lastChild].theirs;
+    return history[lastChild].theirs;
   })()
 }
 
