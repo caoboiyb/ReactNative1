@@ -3,7 +3,7 @@ const jasmine = new Jasmine();
 const fs = require('fs');
 
 const Reporter = require('jasmine-spec-reporter').SpecReporter;
-const customReporter = require('../customReporter');
+const customReporter = require('./customReporter');
 jasmine.jasmine.getEnv().clearReporters();
 jasmine.jasmine.getEnv().addReporter(new Reporter({
   spec: {
