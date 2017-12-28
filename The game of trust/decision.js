@@ -4,7 +4,7 @@
 //   { yours: true, theirs: false },
 // ]
 const decide = (history = []) => {
-  return false; // Your code here
+  history.length > 0 ? false : true;
 }
 
 module.exports = decide;
