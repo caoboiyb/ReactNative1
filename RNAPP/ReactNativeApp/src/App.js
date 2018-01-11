@@ -20,9 +20,23 @@ export default class App extends Component {
     gameState: GAME_STATE.PLAYING
   }
 
+  _onChange = (status, finalScore) => {
+    if (status === 0){
+      this.setState({
+        score: finalScore,
+        gameState: GAME_STATE.GAMEOVER
+      })
+    } else {
+      this.setState({
+        score: 0,
+        gameState: GAME_STATE.PLAYING
+      })
+    }
+  }
+
   render() {
     return this.state.gameState === GAME_STATE.PLAYING
-      ? <GamePlay/>
-      : <GameOver score={this.state.score} />;
+      ? <GamePlay onChange={this._onChange} addPoint={this.addPoint}/>
+      : <GameOver onChange={this._onChange} score={this.state.score} />;
   }
 }

@@ -1,22 +1,25 @@
 import React, { Component } from 'react';
 import {
   View,
-  TouchableOpacity
+  TouchableOpacity,
+  Text
 } from 'react-native';
 
-class ColorButton extends Component {
+class ReplayButton extends Component {
 
     render() {
         return (
             <TouchableOpacity onPress={this.props.onPress}>
                 <View style={{
-                    backgroundColor: this.props.background,
-                    width: 40,
+                    backgroundColor: "gray",
+                    width: 50,
                     height: 40
-                }}></View>
+                }}>
+                    <Text>Replay</Text>
+                </View>
             </TouchableOpacity>
         );
     }
 }
 
-export default ColorButton;
+export default ReplayButton;

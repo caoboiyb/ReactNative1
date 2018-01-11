@@ -14,48 +14,46 @@ import {
 
 import ColorButton from '../component/ColorButton';
 
-export default class App extends Component {
-
+export default class GamePlay extends Component {
   state = {
     score: 0,
-    targetInput: Array.from({ length: 6 }, () => Math.floor(Math.random() * 3)),
-    userInput: []
+    targetInput: [],
+    userInputIndex: 0
   }
 
-  _onPress = () => {
-    this.setState({
-      score: this.state.score + 1
-    })
+  _onPress = (input) => {
+    const {targetInput, userInputIndex, score} = this.state;
+    
+    input === targetInput[userInputIndex] ?
+    (() => {
+      this.setState({
+        score: score + 1,
+        userInputIndex: userInputIndex + 1
+      });
+    })()
+      : this.props.onChange(0, this.state.score)
   }
 
-  onSelect = (id) => {
-    this.setState({
-      userInput: [...this.state.userInput, id]
-    }, () => this.checkInput(this.state.userInput))
-  }
-
-  checkInput = (userInput) => {
-    console.log(this.state)
-    const currentTarget = this.state.targetInput.slice(0, userInput.length)
-    if (userInput[userInput.length - 1] === currentTarget[currentTarget.length - 1]) {
-      this._onPress()
-    }
+  _randomInt = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min;
   }
 
   componentDidMount() {
-    console.log(this.state.targetInput)
+    this.setState({
+      targetInput: Array.from({ length: 6 }, item => this._randomInt(0, 4))
+    })
   }
 
   render() {
     return (
       <View>
-        <Text style={{
-          marginTop: 30
-        }}>{this.state.score}</Text>
-        <ColorButton onPress={this._onPress} background="red" id={0} onSelect={this.onSelect} />
-        <ColorButton onPress={this._onPress} background="yellow" id={1} onSelect={this.onSelect} />
-        <ColorButton onPress={this._onPress} background="blue" id={2} onSelect={this.onSelect} />
-        <ColorButton onPress={this._onPress} background="green" id={3} onSelect={this.onSelect} />
+        <Text>Hello React Native!</Text>
+        <Text>{this.state.score}</Text>
+        <Text>{this.state.targetInput}</Text>
+        <ColorButton onPress={() => this._onPress(0)} background="red" />
+        <ColorButton onPress={() => this._onPress(1)} background="yellow" />
+        <ColorButton onPress={() => this._onPress(2)} background="blue" />
+        <ColorButton onPress={() => this._onPress(3)} background="green" />
       </View>
     );
   }
