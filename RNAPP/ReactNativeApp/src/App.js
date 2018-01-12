@@ -36,7 +36,7 @@ export default class App extends Component {
 
   render() {
     return this.state.gameState === GAME_STATE.PLAYING
-      ? <GamePlay onChange={this._onChange} addPoint={this.addPoint}/>
+      ? <GamePlay onChange={this._onChange} />
       : <GameOver onChange={this._onChange} score={this.state.score} />;
   }
 }

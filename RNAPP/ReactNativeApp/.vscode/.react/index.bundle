@@ -52082,7 +52082,7 @@ var App = _wrapComponent('App')(function (_Component) {
   _createClass(App, [{
     key: 'render',
     value: function render() {
-      return this.state.gameState === GAME_STATE.PLAYING ? _react3.default.createElement(_GamePlay2.default, { onChange: this._onChange, addPoint: this.addPoint, __source: {
+      return this.state.gameState === GAME_STATE.PLAYING ? _react3.default.createElement(_GamePlay2.default, { onChange: this._onChange, __source: {
           fileName: _jsxFileName,
           lineNumber: 39
         }
@@ -52173,39 +52173,38 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
           score = _this$state.score;
 
 
-      input === targetInput[userInputIndex] ? function () {
-        _this.setState({
-          score: score + 1,
-          userInputIndex: userInputIndex + 1
-        });
-      }() : _this.props.onChange(0, _this.state.score);
+      input !== targetInput[userInputIndex] ? _this.props.onGameOver(_this.state.score) : userInputIndex === targetInput.length - 1 ? _this._toNextLevel(_this.state.score + 1) : _this.setState({
+        userInputIndex: userInputIndex + 1
+      });
     }, _this._randomInt = function (min, max) {
       return Math.floor(Math.random() * (max - min)) + min;
+    }, _this._toNextLevel = function (score) {
+      _this.setState({
+        score: score,
+        userInputIndex: 0,
+        targetInput: _this._nextLevel(_this.state.targetInput)
+      });
+    }, _this._nextLevel = function (targetInput) {
+      return targetInput.concat(_this._randomInt(0, 4));
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(GamePlay, [{
     key: 'componentDidMount',
     value: function componentDidMount() {
-      var _this2 = this;
-
-      this.setState({
-        targetInput: Array.from({ length: 6 }, function (item) {
-          return _this2._randomInt(0, 4);
-        })
-      });
+      this._toNextLevel(0);
     }
   }, {
     key: 'render',
     value: function render() {
-      var _this3 = this;
+      var _this2 = this;
 
       return _react3.default.createElement(
         _reactNative.View,
         {
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 49
+            lineNumber: 58
           }
         },
         _react3.default.createElement(
@@ -52213,7 +52212,7 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 50
+              lineNumber: 59
             }
           },
           'Hello React Native!'
@@ -52223,7 +52222,7 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 51
+              lineNumber: 60
             }
           },
           this.state.score
@@ -52233,37 +52232,37 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 52
+              lineNumber: 61
             }
           },
           this.state.targetInput
         ),
         _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this3._onPress(0);
+            return _this2._onPress(0);
           }, background: 'red', __source: {
             fileName: _jsxFileName,
-            lineNumber: 53
+            lineNumber: 62
           }
         }),
         _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this3._onPress(1);
+            return _this2._onPress(1);
           }, background: 'yellow', __source: {
             fileName: _jsxFileName,
-            lineNumber: 54
+            lineNumber: 63
           }
         }),
         _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this3._onPress(2);
+            return _this2._onPress(2);
           }, background: 'blue', __source: {
             fileName: _jsxFileName,
-            lineNumber: 55
+            lineNumber: 64
           }
         }),
         _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this3._onPress(3);
+            return _this2._onPress(3);
           }, background: 'green', __source: {
             fileName: _jsxFileName,
-            lineNumber: 56
+            lineNumber: 65
           }
         })
       );
