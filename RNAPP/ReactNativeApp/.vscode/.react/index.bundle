@@ -52015,6 +52015,10 @@ var _GameOver = require(491                    ); // 491 = ./containers/GameOver
 
 var _GameOver2 = _interopRequireDefault(_GameOver);
 
+var _StyleDemo = require(493                     ); // 493 = ./containers/StyleDemo
+
+var _StyleDemo2 = _interopRequireDefault(_StyleDemo);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -52064,31 +52068,33 @@ var App = _wrapComponent('App')(function (_Component) {
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
       score: 0,
       gameState: GAME_STATE.PLAYING
-    }, _this._onChange = function (status, finalScore) {
-      if (status === 0) {
-        _this.setState({
-          score: finalScore,
-          gameState: GAME_STATE.GAMEOVER
-        });
-      } else {
-        _this.setState({
-          score: 0,
-          gameState: GAME_STATE.PLAYING
-        });
-      }
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
   _createClass(App, [{
+    key: '_changeGameState',
+    value: function _changeGameState(gameState, score) {
+      this.setState({
+        gameState: gameState,
+        score: score
+      });
+    }
+  }, {
     key: 'render',
     value: function render() {
-      return this.state.gameState === GAME_STATE.PLAYING ? _react3.default.createElement(_GamePlay2.default, { onChange: this._onChange, __source: {
+      var _this2 = this;
+
+      return this.state.gameState === GAME_STATE.PLAYING ? _react3.default.createElement(_GamePlay2.default, { onGameOver: function onGameOver(score) {
+          return _this2._changeGameState(GAME_STATE.GAMEOVER, score);
+        }, __source: {
           fileName: _jsxFileName,
-          lineNumber: 39
+          lineNumber: 34
         }
-      }) : _react3.default.createElement(_GameOver2.default, { onChange: this._onChange, score: this.state.score, __source: {
+      }) : _react3.default.createElement(_GameOver2.default, { score: this.state.score, onRetry: function onRetry() {
+          return _this2._changeGameState(GAME_STATE.PLAYING, 0);
+        }, __source: {
           fileName: _jsxFileName,
-          lineNumber: 40
+          lineNumber: 38
         }
       });
     }
@@ -52148,6 +52154,12 @@ function _wrapComponent(id) {
   };
 }
 
+var _Dimensions$get = _reactNative.Dimensions.get("window"),
+    width = _Dimensions$get.width,
+    height = _Dimensions$get.height;
+
+var gameBoardSize = Math.min(width, height);
+
 var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
   _inherits(GamePlay, _Component);
 
@@ -52201,10 +52213,12 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
 
       return _react3.default.createElement(
         _reactNative.View,
-        {
-          __source: {
+        { style: {
+            flex: 1,
+            alignItems: "center"
+          }, __source: {
             fileName: _jsxFileName,
-            lineNumber: 58
+            lineNumber: 62
           }
         },
         _react3.default.createElement(
@@ -52212,7 +52226,7 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 59
+              lineNumber: 66
             }
           },
           'Hello React Native!'
@@ -52222,7 +52236,7 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 60
+              lineNumber: 67
             }
           },
           this.state.score
@@ -52232,39 +52246,55 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
           {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 61
+              lineNumber: 68
             }
           },
           this.state.targetInput
         ),
-        _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this2._onPress(0);
-          }, background: 'red', __source: {
-            fileName: _jsxFileName,
-            lineNumber: 62
-          }
-        }),
-        _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this2._onPress(1);
-          }, background: 'yellow', __source: {
-            fileName: _jsxFileName,
-            lineNumber: 63
-          }
-        }),
-        _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this2._onPress(2);
-          }, background: 'blue', __source: {
-            fileName: _jsxFileName,
-            lineNumber: 64
-          }
-        }),
-        _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-            return _this2._onPress(3);
-          }, background: 'green', __source: {
-            fileName: _jsxFileName,
-            lineNumber: 65
-          }
-        })
+        _react3.default.createElement(
+          _reactNative.View,
+          { style: styles.container, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 69
+            }
+          },
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(0);
+            }, background: 'red', __source: {
+              fileName: _jsxFileName,
+              lineNumber: 70
+            }
+          }),
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(1);
+            }, background: 'yellow', __source: {
+              fileName: _jsxFileName,
+              lineNumber: 71
+            }
+          })
+        ),
+        _react3.default.createElement(
+          _reactNative.View,
+          { style: styles.container, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 73
+            }
+          },
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(2);
+            }, background: 'blue', __source: {
+              fileName: _jsxFileName,
+              lineNumber: 74
+            }
+          }),
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(3);
+            }, background: 'green', __source: {
+              fileName: _jsxFileName,
+              lineNumber: 75
+            }
+          })
+        )
       );
     }
   }]);
@@ -52273,6 +52303,17 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
 }(_react2.Component));
 
 exports.default = GamePlay;
+
+
+var styles = _reactNative.StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "stretch",
+    marginHorizontal: width * 0.025,
+    marginTop: height * 0.025
+  }
+});
 }, 489, null, "ReactNativeApp/src/containers/GamePlay.js");
 __d(/* ReactNativeApp/src/component/ColorButton.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
     value: true
@@ -52319,6 +52360,12 @@ function _wrapComponent(id) {
     };
 }
 
+var _Dimensions$get = _reactNative.Dimensions.get("window"),
+    width = _Dimensions$get.width,
+    height = _Dimensions$get.height;
+
+var gameBoardSize = Math.min(width, height);
+
 var ColorButton = _wrapComponent('ColorButton')(function (_Component) {
     _inherits(ColorButton, _Component);
 
@@ -52335,16 +52382,12 @@ var ColorButton = _wrapComponent('ColorButton')(function (_Component) {
                 _reactNative.TouchableOpacity,
                 { onPress: this.props.onPress, __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 11
+                        lineNumber: 16
                     }
                 },
-                _react3.default.createElement(_reactNative.View, { style: {
-                        backgroundColor: this.props.background,
-                        width: 40,
-                        height: 40
-                    }, __source: {
+                _react3.default.createElement(_reactNative.View, { style: [styles.colorView, { backgroundColor: this.props.background }], __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 12
+                        lineNumber: 17
                     }
                 })
             );
@@ -52353,6 +52396,14 @@ var ColorButton = _wrapComponent('ColorButton')(function (_Component) {
 
     return ColorButton;
 }(_react2.Component));
+
+var styles = _reactNative.StyleSheet.create({
+    colorView: {
+        width: width * 0.45,
+        height: width * 0.45,
+        borderRadius: 5
+    }
+});
 
 exports.default = ColorButton;
 }, 490, null, "ReactNativeApp/src/component/ColorButton.js");
@@ -52420,7 +52471,7 @@ var GameOver = _wrapComponent('GameOver')(function (_Component) {
     }
 
     return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = GameOver.__proto__ || Object.getPrototypeOf(GameOver)).call.apply(_ref, [this].concat(args))), _this), _this._onPress = function () {
-      _this.props.onChange(1, 0);
+      _this.props.onRetry();
     }, _temp), _possibleConstructorReturn(_this, _ret);
   }
 
@@ -52555,6 +52606,158 @@ var ReplayButton = _wrapComponent('ReplayButton')(function (_Component) {
 
 exports.default = ReplayButton;
 }, 492, null, "ReactNativeApp/src/component/ReplayButton.js");
+__d(/* ReactNativeApp/src/containers/StyleDemo.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react2 = require(35     ); // 35 = react
+
+var _react3 = _interopRequireDefault(_react2);
+
+var _index = require(127                                                    ); // 127 = ./../../node_modules/react-transform-hmr/lib/index.js
+
+var _index2 = _interopRequireDefault(_index);
+
+var _jsxFileName = '/Users/ducnt/Documents/ReactNative/RNAPP/ReactNativeApp/src/containers/StyleDemo.js';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _reactNative = require(12            ); // 12 = react-native
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _components = {
+    StyleDemo: {
+        displayName: 'StyleDemo'
+    }
+};
+
+var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: '/Users/ducnt/Documents/ReactNative/RNAPP/ReactNativeApp/src/containers/StyleDemo.js',
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+});
+
+function _wrapComponent(id) {
+    return function (Component) {
+        return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+}
+
+var _Dimensions$get = _reactNative.Dimensions.get("window"),
+    width = _Dimensions$get.width,
+    height = _Dimensions$get.height;
+
+var StyleDemo = _wrapComponent('StyleDemo')(function (_Component) {
+    _inherits(StyleDemo, _Component);
+
+    function StyleDemo() {
+        var _ref;
+
+        var _temp, _this, _ret;
+
+        _classCallCheck(this, StyleDemo);
+
+        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+        }
+
+        return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = StyleDemo.__proto__ || Object.getPrototypeOf(StyleDemo)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    _createClass(StyleDemo, [{
+        key: 'render',
+        value: function render() {
+            return _react3.default.createElement(
+                _reactNative.View,
+                { style: { flex: 1 }, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 17
+                    }
+                },
+                _react3.default.createElement(
+                    _reactNative.View,
+                    { style: [styles.container, { flex: 1 }], __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 18
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.Text,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 19
+                            }
+                        },
+                        'Hello!'
+                    )
+                ),
+                _react3.default.createElement(
+                    _reactNative.View,
+                    { style: {
+                            backgroundColor: "green",
+                            height: 40
+                        }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 22
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.Text,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 26
+                            }
+                        },
+                        'Hello!'
+                    )
+                ),
+                _react3.default.createElement(
+                    _reactNative.View,
+                    { style: {
+                            backgroundColor: "blue",
+                            flex: 1
+                        }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 28
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.Text,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 32
+                            }
+                        },
+                        'Hello!'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return StyleDemo;
+}(_react2.Component));
+
+var styles = _reactNative.StyleSheet.create({
+    container: {
+        backgroundColor: "red",
+        paddingTop: _reactNative.Platform.OS === "ios" ? 20 : 0
+    }
+});
+
+exports.default = StyleDemo;
+}, 493, null, "ReactNativeApp/src/containers/StyleDemo.js");
 ;require(50);
 ;require(0);
 //# sourceMappingURL=index.map

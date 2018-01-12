@@ -10,7 +10,7 @@ import ReplayButton from '../component/ReplayButton';
 class GameOver extends Component {
 
   _onPress = () => {
-    this.props.onChange(1,0)
+    this.props.onRetry()
   }
 
   render() {

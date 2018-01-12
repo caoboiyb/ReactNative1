@@ -9,8 +9,12 @@ import {
   StyleSheet,
   Text,
   View,
-  Button
+  Button,
+  Dimensions
 } from 'react-native';
+
+const {width, height} = Dimensions.get("window")
+const gameBoardSize = Math.min(width, height)
 
 import ColorButton from '../component/ColorButton';
 
@@ -26,11 +30,11 @@ export default class GamePlay extends Component {
 
     input !== targetInput[userInputIndex]
       ? this.props.onGameOver(this.state.score)
-    : userInputIndex === targetInput.length - 1
-      ? this._toNextLevel(this.state.score + 1)
-      : this.setState({
-        userInputIndex: userInputIndex + 1
-      });
+      : userInputIndex === targetInput.length - 1
+        ? this._toNextLevel(this.state.score + 1)
+        : this.setState({
+          userInputIndex: userInputIndex + 1
+        });
   }
 
   _randomInt = (min, max) => {
@@ -55,16 +59,33 @@ export default class GamePlay extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{
+        flex: 1,
+        alignItems: "center"
+      }}>
         <Text>Hello React Native!</Text>
         <Text>{this.state.score}</Text>
         <Text>{this.state.targetInput}</Text>
-        <ColorButton onPress={() => this._onPress(0)} background="red" />
-        <ColorButton onPress={() => this._onPress(1)} background="yellow" />
-        <ColorButton onPress={() => this._onPress(2)} background="blue" />
-        <ColorButton onPress={() => this._onPress(3)} background="green" />
+        <View style={styles.container}>
+          <ColorButton onPress={() => this._onPress(0)} background="red" />
+          <ColorButton onPress={() => this._onPress(1)} background="yellow" />
+        </View>
+        <View style={styles.container}>
+          <ColorButton onPress={() => this._onPress(2)} background="blue" />
+          <ColorButton onPress={() => this._onPress(3)} background="green" />
+        </View>
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignSelf: "stretch",
+    marginHorizontal: width*0.025,
+    marginTop: height*0.025
+  }
+})
 
