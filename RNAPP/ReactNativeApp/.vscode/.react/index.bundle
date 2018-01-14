@@ -52221,7 +52221,7 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
 
       return _react3.default.createElement(
         _reactNative.View,
-        { style: styles.container, onLayout: this._onLayout, __source: {
+        { style: styles.container, __source: {
             fileName: _jsxFileName,
             lineNumber: 73
           }
@@ -52258,67 +52258,39 @@ var GamePlay = _wrapComponent('GamePlay')(function (_Component) {
         ),
         _react3.default.createElement(
           _reactNative.View,
-          { style: { flex: 1 }, __source: {
+          { style: styles.wrapperGameBoard, onLayout: this._onLayout, __source: {
               fileName: _jsxFileName,
               lineNumber: 77
             }
           },
-          _react3.default.createElement(
-            _reactNative.View,
-            { style: {
-                width: this.state.gameBoardSize,
-                height: this.state.gameBoardSize,
-                alignSelf: 'center'
-              }, __source: {
-                fileName: _jsxFileName,
-                lineNumber: 78
-              }
-            },
-            _react3.default.createElement(
-              _reactNative.View,
-              { style: [styles.container, styles.row], __source: {
-                  fileName: _jsxFileName,
-                  lineNumber: 83
-                }
-              },
-              _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-                  return _this2._onPress(0);
-                }, background: 'red', __source: {
-                  fileName: _jsxFileName,
-                  lineNumber: 84
-                }
-              }),
-              _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-                  return _this2._onPress(1);
-                }, background: 'yellow', __source: {
-                  fileName: _jsxFileName,
-                  lineNumber: 85
-                }
-              })
-            ),
-            _react3.default.createElement(
-              _reactNative.View,
-              { style: [styles.container, styles.row], __source: {
-                  fileName: _jsxFileName,
-                  lineNumber: 87
-                }
-              },
-              _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-                  return _this2._onPress(2);
-                }, background: 'blue', __source: {
-                  fileName: _jsxFileName,
-                  lineNumber: 88
-                }
-              }),
-              _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
-                  return _this2._onPress(3);
-                }, background: 'green', __source: {
-                  fileName: _jsxFileName,
-                  lineNumber: 89
-                }
-              })
-            )
-          )
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(0);
+            }, background: 'red', width: this.state.gameBoardSize * 0.5, height: this.state.gameBoardSize * 0.5, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 78
+            }
+          }),
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(1);
+            }, background: 'yellow', width: this.state.gameBoardSize * 0.5, height: this.state.gameBoardSize * 0.5, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 79
+            }
+          }),
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(2);
+            }, background: 'blue', width: this.state.gameBoardSize * 0.5, height: this.state.gameBoardSize * 0.5, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 80
+            }
+          }),
+          _react3.default.createElement(_ColorButton2.default, { onPress: function onPress() {
+              return _this2._onPress(3);
+            }, background: 'green', width: this.state.gameBoardSize * 0.5, height: this.state.gameBoardSize * 0.5, __source: {
+              fileName: _jsxFileName,
+              lineNumber: 81
+            }
+          })
         )
       );
     }
@@ -52334,8 +52306,13 @@ var styles = _reactNative.StyleSheet.create({
   container: {
     flex: 1
   },
-  row: {
-    flexDirection: "row"
+  wrapperGameBoard: {
+    width: gameBoardSize,
+    height: gameBoardSize * 0.5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignSelf: 'center',
+    flex: 1
   }
 });
 }, 489, null, "ReactNativeApp/src/containers/GamePlay.js");
@@ -52398,16 +52375,19 @@ var ColorButton = _wrapComponent('ColorButton')(function (_Component) {
     value: function render() {
       return _react3.default.createElement(
         _reactNative.TouchableOpacity,
-        { style: styles.touchable, onPress: this.props.onPress, __source: {
+        { style: [styles.touchable, {
+            width: this.props.width,
+            height: this.props.height
+          }], onPress: this.props.onPress, __source: {
             fileName: _jsxFileName,
-            lineNumber: 11
+            lineNumber: 13
           }
         },
         _react3.default.createElement(_reactNative.View, { style: [styles.colorView, {
             backgroundColor: this.props.background
           }], __source: {
             fileName: _jsxFileName,
-            lineNumber: 12
+            lineNumber: 17
           }
         })
       );
@@ -52419,7 +52399,6 @@ var ColorButton = _wrapComponent('ColorButton')(function (_Component) {
 
 var styles = _reactNative.StyleSheet.create({
   touchable: {
-    flex: 1,
     padding: 10
   },
   colorView: {

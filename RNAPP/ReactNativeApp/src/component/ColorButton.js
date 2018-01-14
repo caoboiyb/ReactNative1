@@ -2,13 +2,18 @@ import React, { Component } from 'react';
 import {
   View,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Dimensions
 } from 'react-native';
 
 class ColorButton extends Component {
+
   render() {
     return (
-      <TouchableOpacity style={styles.touchable} onPress={this.props.onPress}>
+      <TouchableOpacity style={[styles.touchable, {
+        width: this.props.width,
+        height: this.props.height
+      }]} onPress={this.props.onPress}>
         <View style={[styles.colorView, {
           backgroundColor: this.props.background
         }]}></View>
@@ -19,7 +24,6 @@ class ColorButton extends Component {
 
 const styles = StyleSheet.create({
   touchable: {
-    flex: 1,
     padding: 10
   },
   colorView: {

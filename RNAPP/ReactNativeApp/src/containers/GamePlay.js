@@ -70,25 +70,15 @@ export default class GamePlay extends Component {
   render() {
 
     return (
-      <View style={styles.container}  onLayout={this._onLayout}>
+      <View style={styles.container}>
         <Text>Hello React Native!</Text>
         <Text>{this.state.score}</Text>
         <Text>{this.state.targetInput}</Text>
-        <View style={{ flex: 1 }}>
-          <View style={{
-            width: this.state.gameBoardSize,
-            height: this.state.gameBoardSize,
-            alignSelf: 'center',
-          }}>
-            <View style={[styles.container, styles.row]}>
-              <ColorButton onPress={() => this._onPress(0)} background="red" />
-              <ColorButton onPress={() => this._onPress(1)} background="yellow" />
-            </View>
-            <View style={[styles.container, styles.row]}>
-              <ColorButton onPress={() => this._onPress(2)} background="blue" />
-              <ColorButton onPress={() => this._onPress(3)} background="green" />
-            </View>
-          </View>
+        <View style={styles.wrapperGameBoard} onLayout={this._onLayout}>
+              <ColorButton onPress={() => this._onPress(0)} background="red" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
+              <ColorButton onPress={() => this._onPress(1)} background="yellow" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
+              <ColorButton onPress={() => this._onPress(2)} background="blue" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
+              <ColorButton onPress={() => this._onPress(3)} background="green" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
         </View>
       </View>
     );
@@ -99,8 +89,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  row: {
-    flexDirection: "row"
+  wrapperGameBoard: {
+    width: gameBoardSize,
+    height: gameBoardSize * 0.5,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignSelf: 'center',
+    flex: 1
   }
 })
 
