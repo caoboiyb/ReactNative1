@@ -23,7 +23,7 @@ export default class GamePlay extends Component {
     score: 0,
     targetInput: [],
     userInputIndex: 0,
-    gameBoardSize: gameBoardSize
+    gameBoardSize: 0
   }
 
   _onPress = (input) => {
@@ -54,13 +54,12 @@ export default class GamePlay extends Component {
     return targetInput.concat(this._randomInt(0, 4));
   }
 
-  _onLayout = (e) => {
-    const newWidth = e.nativeEvent.layout.width
-    const newHeight = e.nativeEvent.layout.height
-    const newGameBoardSize = newWidth < newHeight ? gameBoardSize : gameBoardSize * 0.85
+  _onLayout = (event) => {
+    const { width, height } = event.nativeEvent.layout;
+
     this.setState({
-      gameBoardSize: newGameBoardSize
-    })
+      gameBoardSize: Math.min(width, height)
+    });
   }
 
   componentDidMount() {
@@ -68,34 +67,46 @@ export default class GamePlay extends Component {
   }
 
   render() {
-
     return (
-      <View style={styles.container}>
-        <Text>Hello React Native!</Text>
-        <Text>{this.state.score}</Text>
-        <Text>{this.state.targetInput}</Text>
-        <View style={styles.wrapperGameBoard} onLayout={this._onLayout}>
-              <ColorButton onPress={() => this._onPress(0)} background="red" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
-              <ColorButton onPress={() => this._onPress(1)} background="yellow" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
-              <ColorButton onPress={() => this._onPress(2)} background="blue" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
-              <ColorButton onPress={() => this._onPress(3)} background="green" width={this.state.gameBoardSize*0.5} height={this.state.gameBoardSize*0.5}/>
+      <View style={[styles.container, styles.wrapper]}>
+        <Text style={styles.scoreText}>{`Score: ${this.state.score}`}</Text>
+        <View style={styles.boardContainer} onLayout={this._onLayout}>
+          <View style={[
+            styles.gameBoard,
+            {
+              width: this.state.gameBoardSize,
+              height: this.state.gameBoardSize
+            }
+          ]}>
+            <ColorButton onPress={() => this._onPress(0)} background="red" />
+            <ColorButton onPress={() => this._onPress(1)} background="yellow" />
+            <ColorButton onPress={() => this._onPress(2)} background="blue" />
+            <ColorButton onPress={() => this._onPress(3)} background="green" />
+          </View>
         </View>
       </View>
     );
   }
 }
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  wrapper: {
+    paddingTop: 20,
+    alignItems: "center"
   },
-  wrapperGameBoard: {
-    width: gameBoardSize,
-    height: gameBoardSize * 0.5,
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignSelf: 'center',
+  container: {
     flex: 1
+  },
+  scoreText: {
+    paddingVertical: 30,
+    fontSize: 36
+  },
+  boardContainer: {
+    flex: 1,
+    width: "100%",
+    alignItems: "center"
+  },
+  gameBoard: {
+    flexWrap: "wrap"
   }
-})
+});
 

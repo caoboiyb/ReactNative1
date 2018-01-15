@@ -10,10 +10,7 @@ class ColorButton extends Component {
 
   render() {
     return (
-      <TouchableOpacity style={[styles.touchable, {
-        width: this.props.width,
-        height: this.props.height
-      }]} onPress={this.props.onPress}>
+      <TouchableOpacity style={styles.touchable} onPress={this.props.onPress}>
         <View style={[styles.colorView, {
           backgroundColor: this.props.background
         }]}></View>
@@ -24,17 +21,12 @@ class ColorButton extends Component {
 
 const styles = StyleSheet.create({
   touchable: {
+    width: "50%",
+    height: "50%",
     padding: 10
   },
   colorView: {
     borderRadius: 5,
-    shadowRadius: 3,
-    shadowOffset: {
-      width: 0,
-      height: 5
-    },
-    shadowColor: "black",
-    shadowOpacity: 0.3,
     flex: 1
   }
 })
