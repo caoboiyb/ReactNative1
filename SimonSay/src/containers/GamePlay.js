@@ -8,11 +8,12 @@ import {
 } from 'react-native';
 
 const PlayState = {
-  HINTING : "HINTING",
-  PLAYING : "PLAYING"
+  HINTING: "HINTING",
+  PLAYING: "PLAYING"
 }
 
 import ColorButton from "../components/ColorButton";
+import Sound from 'react-native-sound';
 
 export default class GamePlay extends PureComponent {
   state = {
@@ -72,21 +73,21 @@ export default class GamePlay extends PureComponent {
   }
 
   _onButtonFlashCompleted = () => {
-    const {flashIndex, targetInput} = this.state
+    const { flashIndex, targetInput } = this.state
     this.setState({
       flashIndex: -1
     }, () => {
       this.setState(
         flashIndex < targetInput.length - 1
-        ? {
-          playState: PlayState.HINTING,
-          flashIndex: flashIndex + 1
-        }
-        : {
-          playState: PlayState.PLAYING
-        }
+          ? {
+            playState: PlayState.HINTING,
+            flashIndex: flashIndex + 1
+          }
+          : {
+            playState: PlayState.PLAYING
+          }
       )
-    })    
+    })
   }
 
   _propsForButtonIndex = (index) => {
@@ -101,7 +102,16 @@ export default class GamePlay extends PureComponent {
 
   componentDidMount() {
     this._toNextLevel(0);
+    Sound.setCategory('Playback');
+    var whoosh = new Sound('pling1.mp3', Sound.MAIN_BUNDLE, (error) => {
+      if (error) {
+        console.log('failed to load the sound', error);
+        return;
+      }
+      whoosh.play();
+    });
   }
+
 
   render() {
     return (
@@ -115,10 +125,10 @@ export default class GamePlay extends PureComponent {
               height: this.state.gameBoardSize
             }
           ]}>
-            <ColorButton {...this._propsForButtonIndex(0)} />
-            <ColorButton {...this._propsForButtonIndex(1)} />
-            <ColorButton {...this._propsForButtonIndex(2)} />
-            <ColorButton {...this._propsForButtonIndex(3)} />
+            <ColorButton {...this._propsForButtonIndex(0) } />
+            <ColorButton {...this._propsForButtonIndex(1) } />
+            <ColorButton {...this._propsForButtonIndex(2) } />
+            <ColorButton {...this._propsForButtonIndex(3) } />
           </View>
         </View>
       </View>
