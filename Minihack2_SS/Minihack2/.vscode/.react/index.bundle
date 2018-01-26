@@ -58583,15 +58583,43 @@ __d(function (global, require, module, exports, _dependencyMap) {
       }
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-        left: {
-          currentUnit: "Metre",
-          value: "0"
-        },
-        right: {
-          currentUnit: "Metre",
-          value: "0"
+        leftIndex: "0",
+        leftValue: "0",
+        rightIndex: "0",
+        rightValue: "0"
+      }, _this._onChangeInput = function (value, pos) {
+        if (pos == "0") {
+          var pow = _this.state.rightIndex - _this.state.leftIndex;
+
+          _this.setState({
+            leftValue: value,
+            rightValue: String(Number(value) * 10 ** pow)
+          });
+        } else {
+          var _pow = _this.state.leftIndex - _this.state.rightIndex;
+
+          _this.setState({
+            rightValue: value,
+            leftValue: String(Number(value) * 10 ** _pow)
+          });
         }
-      }, _this._onChangeInput = function (unit, value) {}, _temp), _possibleConstructorReturn(_this, _ret);
+      }, _this._onChangeUnit = function (index, pos) {
+        if (pos == "0") {
+          var pow = _this.state.rightIndex - index;
+
+          _this.setState({
+            leftIndex: index,
+            rightValue: String(Number(_this.state.leftValue) * 10 ** pow)
+          });
+        } else {
+          var _pow2 = _this.state.leftIndex - index;
+
+          _this.setState({
+            rightIndex: index,
+            leftValue: String(Number(_this.state.rightValue) * 10 ** _pow2)
+          });
+        }
+      }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
     _createClass(App, [{
@@ -58608,21 +58636,29 @@ __d(function (global, require, module, exports, _dependencyMap) {
             },
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 33
+              lineNumber: 59
             }
           },
           _react3.default.createElement(_ColumnView2.default, {
             onChangeInput: this._onChangeInput,
+            onChangeUnit: this._onChangeUnit,
+            position: "0",
+            unit: unit[this.state.leftIndex],
+            value: this.state.leftValue,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 34
+              lineNumber: 60
             }
           }),
           _react3.default.createElement(_ColumnView2.default, {
             onChangeInput: this._onChangeInput,
+            onChangeUnit: this._onChangeUnit,
+            position: "1",
+            unit: unit[this.state.rightIndex],
+            value: this.state.rightValue,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 35
+              lineNumber: 66
             }
           })
         );
@@ -58684,6 +58720,8 @@ __d(function (global, require, module, exports, _dependencyMap) {
         };
     }
 
+    var unit = ["Metre", "Decimetre", "Centimetre", "Milimetre"];
+
     var ColumnView = _wrapComponent("ColumnView")(function (_PureComponent) {
         _inherits(ColumnView, _PureComponent);
 
@@ -58699,21 +58737,24 @@ __d(function (global, require, module, exports, _dependencyMap) {
             }
 
             return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ColumnView.__proto__ || Object.getPrototypeOf(ColumnView)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-                currentUnit: "Metre",
-                unit: ["Metre", "Decimetre", "Centimetre", "Milimetre"],
-                value: "125"
+                value: "0"
             }, _this._onPress = function (index) {
-                _this.setState({
-                    currentUnit: _this.state.unit[index]
-                });
+                _this.props.onChangeUnit(index, _this.props.position);
             }, _this._onChangeText = function (text) {
                 _this.setState({
                     value: text
-                });
+                }, _this.props.onChangeInput(text, _this.props.position));
             }, _temp), _possibleConstructorReturn(_this, _ret);
         }
 
         _createClass(ColumnView, [{
+            key: "componentWillReceiveProps",
+            value: function componentWillReceiveProps(nextProps) {
+                this.setState({
+                    value: nextProps.value
+                });
+            }
+        }, {
             key: "render",
             value: function render() {
                 var _this2 = this;
@@ -58724,7 +58765,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                         style: styles.wrapper,
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 33
+                            lineNumber: 38
                         }
                     },
                     _react3.default.createElement(
@@ -58735,7 +58776,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                             },
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 34
+                                lineNumber: 39
                             }
                         },
                         _react3.default.createElement(
@@ -58744,10 +58785,10 @@ __d(function (global, require, module, exports, _dependencyMap) {
                                 style: styles.text,
                                 __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 35
+                                    lineNumber: 40
                                 }
                             },
-                            this.state.currentUnit
+                            this.props.unit
                         ),
                         _react3.default.createElement(_reactNative.TextInput, {
                             onChangeText: this._onChangeText,
@@ -58757,7 +58798,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                             value: this.state.value,
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 36
+                                lineNumber: 41
                             }
                         })
                     ),
@@ -58770,7 +58811,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
                             },
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 38
+                                lineNumber: 43
                             }
                         },
                         _react3.default.createElement(_Selector2.default, {
@@ -58778,10 +58819,10 @@ __d(function (global, require, module, exports, _dependencyMap) {
                                 return _this2._onPress(0);
                             },
                             backgroundColor: "#5D4883",
-                            name: this.state.unit[0],
+                            name: unit[0],
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 39
+                                lineNumber: 44
                             }
                         }),
                         _react3.default.createElement(_Selector2.default, {
@@ -58789,10 +58830,10 @@ __d(function (global, require, module, exports, _dependencyMap) {
                                 return _this2._onPress(1);
                             },
                             backgroundColor: "#6A5295",
-                            name: this.state.unit[1],
+                            name: unit[1],
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 40
+                                lineNumber: 45
                             }
                         }),
                         _react3.default.createElement(_Selector2.default, {
@@ -58800,10 +58841,10 @@ __d(function (global, require, module, exports, _dependencyMap) {
                                 return _this2._onPress(2);
                             },
                             backgroundColor: "#5D4883",
-                            name: this.state.unit[2],
+                            name: unit[2],
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 41
+                                lineNumber: 46
                             }
                         }),
                         _react3.default.createElement(_Selector2.default, {
@@ -58811,10 +58852,10 @@ __d(function (global, require, module, exports, _dependencyMap) {
                                 return _this2._onPress(3);
                             },
                             backgroundColor: "#6A5295",
-                            name: this.state.unit[3],
+                            name: unit[3],
                             __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 42
+                                lineNumber: 47
                             }
                         })
                     )
