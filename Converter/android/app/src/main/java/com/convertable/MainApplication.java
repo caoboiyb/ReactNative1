@@ -1,4 +1,4 @@
-package com.minihack2;
+package com.convertable;
 
 import android.app.Application;
 

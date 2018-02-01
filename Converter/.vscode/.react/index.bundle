@@ -1400,16 +1400,16 @@ var __DEV__=true,__BUNDLE_START_TIME__=this.nativePerformanceNow?nativePerforman
 __d(function (global, require, module, exports, _dependencyMap) {
   var _reactNative = require(_dependencyMap[0], "react-native");
 
-  var _App = require(_dependencyMap[1], "./src/App.js");
+  var _App = require(_dependencyMap[1], "./src/App");
 
   var _App2 = _interopRequireDefault(_App);
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-  _reactNative.AppRegistry.registerComponent('Converter', function () {
+  _reactNative.AppRegistry.registerComponent('Convertable', function () {
     return _App2.default;
   });
-},11,[12,489],"Converter/index.js");
+},11,[12,489],"Convertable/index.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   'use strict';
 
@@ -58535,17 +58535,21 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _reactNative = require(_dependencyMap[2], "react-native");
 
-  var _big = require(_dependencyMap[3], "big.js");
+  var _reactRedux = require(_dependencyMap[3], "react-redux");
 
-  var _big2 = _interopRequireDefault(_big);
+  var _redux = require(_dependencyMap[4], "redux");
 
-  var _Styles = require(_dependencyMap[4], "./Styles");
+  var _ConvertScreen = require(_dependencyMap[5], "./containers/ConvertScreen");
 
-  var _Styles2 = _interopRequireDefault(_Styles);
+  var _ConvertScreen2 = _interopRequireDefault(_ConvertScreen);
 
-  var _ConvertColumn = require(_dependencyMap[5], "./components/ConvertColumn");
+  var _CategoryScreen = require(_dependencyMap[6], "./containers/CategoryScreen");
 
-  var _ConvertColumn2 = _interopRequireDefault(_ConvertColumn);
+  var _CategoryScreen2 = _interopRequireDefault(_CategoryScreen);
+
+  var _reducers = require(_dependencyMap[7], "./reducers/");
+
+  var _reducers2 = _interopRequireDefault(_reducers);
 
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58574,8 +58578,14 @@ __d(function (global, require, module, exports, _dependencyMap) {
     };
   }
 
-  var App = _wrapComponent("App")(function (_Component) {
-    _inherits(App, _Component);
+  var store = (0, _redux.createStore)(_reducers2.default);
+  var page = {
+    CATEGORY: "CATEGORY",
+    CONVERT: "CONVERT"
+  };
+
+  var App = _wrapComponent("App")(function (_PureComponent) {
+    _inherits(App, _PureComponent);
 
     function App() {
       var _ref;
@@ -58589,27 +58599,14 @@ __d(function (global, require, module, exports, _dependencyMap) {
       }
 
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-        items: [{
-          id: 0,
-          title: "Meter",
-          ratio: 1
-        }, {
-          id: 1,
-          title: "Decimeter",
-          ratio: 0.1
-        }, {
-          id: 2,
-          title: "Centimeter",
-          ratio: 0.01
-        }, {
-          id: 3,
-          title: "Milimeter",
-          ratio: 0.001
-        }],
-        baseValue: 0
-      }, _this._updateBaseValue = function (value) {
+        currentPage: page.CONVERT
+      }, _this._goToCategoryScreen = function () {
         return _this.setState({
-          baseValue: value
+          currentPage: page.CATEGORY
+        });
+      }, _this._goToConvertScreen = function () {
+        return _this.setState({
+          currentPage: page.CONVERT
         });
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
@@ -58618,30 +58615,25 @@ __d(function (global, require, module, exports, _dependencyMap) {
       key: "render",
       value: function render() {
         return _react3.default.createElement(
-          _reactNative.View,
+          _reactRedux.Provider,
           {
-            style: [_Styles2.default.bgPrimary3, _Styles2.default.container, styles.appContainer],
+            store: store,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 35
+              lineNumber: 34
             }
           },
-          _react3.default.createElement(_ConvertColumn2.default, {
-            items: this.state.items,
-            baseValue: this.state.baseValue,
-            updateBaseValue: this._updateBaseValue,
+          this.state.currentPage === page.CONVERT ? _react3.default.createElement(_ConvertScreen2.default, {
+            toggleScreen: this._goToCategoryScreen,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 36
+              lineNumber: 37
             }
-          }),
-          _react3.default.createElement(_ConvertColumn2.default, {
-            items: this.state.items,
-            baseValue: this.state.baseValue,
-            updateBaseValue: this._updateBaseValue,
+          }) : _react3.default.createElement(_CategoryScreen2.default, {
+            toggleScreen: this._goToConvertScreen,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 41
+              lineNumber: 38
             }
           })
         );
@@ -58649,9 +58641,1934 @@ __d(function (global, require, module, exports, _dependencyMap) {
     }]);
 
     return App;
-  }(_react2.Component));
+  }(_react2.PureComponent));
 
   exports.default = App;
+},489,[109,128,12,490,501,518,527,528],"Convertable/src/App.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.connect = exports.connectAdvanced = exports.createProvider = exports.Provider = undefined;
+
+  var _Provider = require(_dependencyMap[0], './components/Provider');
+
+  var _Provider2 = _interopRequireDefault(_Provider);
+
+  var _connectAdvanced = require(_dependencyMap[1], './components/connectAdvanced');
+
+  var _connectAdvanced2 = _interopRequireDefault(_connectAdvanced);
+
+  var _connect = require(_dependencyMap[2], './connect/connect');
+
+  var _connect2 = _interopRequireDefault(_connect);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  exports.Provider = _Provider2.default;
+  exports.createProvider = _Provider.createProvider;
+  exports.connectAdvanced = _connectAdvanced2.default;
+  exports.connect = _connect2.default;
+},490,[491,494,498],"react-redux/lib/index.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.createProvider = createProvider;
+
+  var _react = require(_dependencyMap[0], 'react');
+
+  var _propTypes = require(_dependencyMap[1], 'prop-types');
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
+
+  var _PropTypes = require(_dependencyMap[2], '../utils/PropTypes');
+
+  var _warning = require(_dependencyMap[3], '../utils/warning');
+
+  var _warning2 = _interopRequireDefault(_warning);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+
+  var didWarnAboutReceivingStore = false;
+
+  function warnAboutReceivingStore() {
+    if (didWarnAboutReceivingStore) {
+      return;
+    }
+
+    didWarnAboutReceivingStore = true;
+    (0, _warning2.default)('<Provider> does not support changing `store` on the fly. ' + 'It is most likely that you see this error because you updated to ' + 'Redux 2.x and React Redux 2.x which no longer hot reload reducers ' + 'automatically. See https://github.com/reactjs/react-redux/releases/' + 'tag/v2.0.0 for the migration instructions.');
+  }
+
+  function createProvider() {
+    var _Provider$childContex;
+
+    var storeKey = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'store';
+    var subKey = arguments[1];
+    var subscriptionKey = subKey || storeKey + 'Subscription';
+
+    var Provider = function (_Component) {
+      _inherits(Provider, _Component);
+
+      Provider.prototype.getChildContext = function getChildContext() {
+        var _ref;
+
+        return _ref = {}, _ref[storeKey] = this[storeKey], _ref[subscriptionKey] = null, _ref;
+      };
+
+      function Provider(props, context) {
+        _classCallCheck(this, Provider);
+
+        var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+        _this[storeKey] = props.store;
+        return _this;
+      }
+
+      Provider.prototype.render = function render() {
+        return _react.Children.only(this.props.children);
+      };
+
+      return Provider;
+    }(_react.Component);
+
+    if (process.env.NODE_ENV !== 'production') {
+      Provider.prototype.componentWillReceiveProps = function (nextProps) {
+        if (this[storeKey] !== nextProps.store) {
+          warnAboutReceivingStore();
+        }
+      };
+    }
+
+    Provider.propTypes = {
+      store: _PropTypes.storeShape.isRequired,
+      children: _propTypes2.default.element.isRequired
+    };
+    Provider.childContextTypes = (_Provider$childContex = {}, _Provider$childContex[storeKey] = _PropTypes.storeShape.isRequired, _Provider$childContex[subscriptionKey] = _PropTypes.subscriptionShape, _Provider$childContex);
+    return Provider;
+  }
+
+  exports.default = createProvider();
+},491,[109,292,492,493],"react-redux/lib/components/Provider.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.storeShape = exports.subscriptionShape = undefined;
+
+  var _propTypes = require(_dependencyMap[0], 'prop-types');
+
+  var _propTypes2 = _interopRequireDefault(_propTypes);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  var subscriptionShape = exports.subscriptionShape = _propTypes2.default.shape({
+    trySubscribe: _propTypes2.default.func.isRequired,
+    tryUnsubscribe: _propTypes2.default.func.isRequired,
+    notifyNestedSubs: _propTypes2.default.func.isRequired,
+    isSubscribed: _propTypes2.default.func.isRequired
+  });
+
+  var storeShape = exports.storeShape = _propTypes2.default.shape({
+    subscribe: _propTypes2.default.func.isRequired,
+    dispatch: _propTypes2.default.func.isRequired,
+    getState: _propTypes2.default.func.isRequired
+  });
+},492,[292],"react-redux/lib/utils/PropTypes.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.default = warning;
+
+  function warning(message) {
+    if (typeof console !== 'undefined' && typeof console.error === 'function') {
+      console.error(message);
+    }
+
+    try {
+      throw new Error(message);
+    } catch (e) {}
+  }
+},493,[],"react-redux/lib/utils/warning.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  exports.default = connectAdvanced;
+
+  var _hoistNonReactStatics = require(_dependencyMap[0], 'hoist-non-react-statics');
+
+  var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
+
+  var _invariant = require(_dependencyMap[1], 'invariant');
+
+  var _invariant2 = _interopRequireDefault(_invariant);
+
+  var _react = require(_dependencyMap[2], 'react');
+
+  var _Subscription = require(_dependencyMap[3], '../utils/Subscription');
+
+  var _Subscription2 = _interopRequireDefault(_Subscription);
+
+  var _PropTypes = require(_dependencyMap[4], '../utils/PropTypes');
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  function _possibleConstructorReturn(self, call) {
+    if (!self) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+
+    return call && (typeof call === "object" || typeof call === "function") ? call : self;
+  }
+
+  function _inherits(subClass, superClass) {
+    if (typeof superClass !== "function" && superClass !== null) {
+      throw new TypeError("Super expression must either be null or a function, not " + typeof superClass);
+    }
+
+    subClass.prototype = Object.create(superClass && superClass.prototype, {
+      constructor: {
+        value: subClass,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+    if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+  }
+
+  function _objectWithoutProperties(obj, keys) {
+    var target = {};
+
+    for (var i in obj) {
+      if (keys.indexOf(i) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+      target[i] = obj[i];
+    }
+
+    return target;
+  }
+
+  var hotReloadingVersion = 0;
+  var dummyState = {};
+
+  function noop() {}
+
+  function makeSelectorStateful(sourceSelector, store) {
+    var selector = {
+      run: function runComponentSelector(props) {
+        try {
+          var nextProps = sourceSelector(store.getState(), props);
+
+          if (nextProps !== selector.props || selector.error) {
+            selector.shouldComponentUpdate = true;
+            selector.props = nextProps;
+            selector.error = null;
+          }
+        } catch (error) {
+          selector.shouldComponentUpdate = true;
+          selector.error = error;
+        }
+      }
+    };
+    return selector;
+  }
+
+  function connectAdvanced(selectorFactory) {
+    var _contextTypes, _childContextTypes;
+
+    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        _ref$getDisplayName = _ref.getDisplayName,
+        getDisplayName = _ref$getDisplayName === undefined ? function (name) {
+      return 'ConnectAdvanced(' + name + ')';
+    } : _ref$getDisplayName,
+        _ref$methodName = _ref.methodName,
+        methodName = _ref$methodName === undefined ? 'connectAdvanced' : _ref$methodName,
+        _ref$renderCountProp = _ref.renderCountProp,
+        renderCountProp = _ref$renderCountProp === undefined ? undefined : _ref$renderCountProp,
+        _ref$shouldHandleStat = _ref.shouldHandleStateChanges,
+        shouldHandleStateChanges = _ref$shouldHandleStat === undefined ? true : _ref$shouldHandleStat,
+        _ref$storeKey = _ref.storeKey,
+        storeKey = _ref$storeKey === undefined ? 'store' : _ref$storeKey,
+        _ref$withRef = _ref.withRef,
+        withRef = _ref$withRef === undefined ? false : _ref$withRef,
+        connectOptions = _objectWithoutProperties(_ref, ['getDisplayName', 'methodName', 'renderCountProp', 'shouldHandleStateChanges', 'storeKey', 'withRef']);
+
+    var subscriptionKey = storeKey + 'Subscription';
+    var version = hotReloadingVersion++;
+    var contextTypes = (_contextTypes = {}, _contextTypes[storeKey] = _PropTypes.storeShape, _contextTypes[subscriptionKey] = _PropTypes.subscriptionShape, _contextTypes);
+    var childContextTypes = (_childContextTypes = {}, _childContextTypes[subscriptionKey] = _PropTypes.subscriptionShape, _childContextTypes);
+    return function wrapWithConnect(WrappedComponent) {
+      (0, _invariant2.default)(typeof WrappedComponent == 'function', 'You must pass a component to the function returned by ' + ('connect. Instead received ' + JSON.stringify(WrappedComponent)));
+      var wrappedComponentName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+      var displayName = getDisplayName(wrappedComponentName);
+
+      var selectorFactoryOptions = _extends({}, connectOptions, {
+        getDisplayName: getDisplayName,
+        methodName: methodName,
+        renderCountProp: renderCountProp,
+        shouldHandleStateChanges: shouldHandleStateChanges,
+        storeKey: storeKey,
+        withRef: withRef,
+        displayName: displayName,
+        wrappedComponentName: wrappedComponentName,
+        WrappedComponent: WrappedComponent
+      });
+
+      var Connect = function (_Component) {
+        _inherits(Connect, _Component);
+
+        function Connect(props, context) {
+          _classCallCheck(this, Connect);
+
+          var _this = _possibleConstructorReturn(this, _Component.call(this, props, context));
+
+          _this.version = version;
+          _this.state = {};
+          _this.renderCount = 0;
+          _this.store = props[storeKey] || context[storeKey];
+          _this.propsMode = Boolean(props[storeKey]);
+          _this.setWrappedInstance = _this.setWrappedInstance.bind(_this);
+          (0, _invariant2.default)(_this.store, 'Could not find "' + storeKey + '" in either the context or props of ' + ('"' + displayName + '". Either wrap the root component in a <Provider>, ') + ('or explicitly pass "' + storeKey + '" as a prop to "' + displayName + '".'));
+
+          _this.initSelector();
+
+          _this.initSubscription();
+
+          return _this;
+        }
+
+        Connect.prototype.getChildContext = function getChildContext() {
+          var _ref2;
+
+          var subscription = this.propsMode ? null : this.subscription;
+          return _ref2 = {}, _ref2[subscriptionKey] = subscription || this.context[subscriptionKey], _ref2;
+        };
+
+        Connect.prototype.componentDidMount = function componentDidMount() {
+          if (!shouldHandleStateChanges) return;
+          this.subscription.trySubscribe();
+          this.selector.run(this.props);
+          if (this.selector.shouldComponentUpdate) this.forceUpdate();
+        };
+
+        Connect.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+          this.selector.run(nextProps);
+        };
+
+        Connect.prototype.shouldComponentUpdate = function shouldComponentUpdate() {
+          return this.selector.shouldComponentUpdate;
+        };
+
+        Connect.prototype.componentWillUnmount = function componentWillUnmount() {
+          if (this.subscription) this.subscription.tryUnsubscribe();
+          this.subscription = null;
+          this.notifyNestedSubs = noop;
+          this.store = null;
+          this.selector.run = noop;
+          this.selector.shouldComponentUpdate = false;
+        };
+
+        Connect.prototype.getWrappedInstance = function getWrappedInstance() {
+          (0, _invariant2.default)(withRef, 'To access the wrapped instance, you need to specify ' + ('{ withRef: true } in the options argument of the ' + methodName + '() call.'));
+          return this.wrappedInstance;
+        };
+
+        Connect.prototype.setWrappedInstance = function setWrappedInstance(ref) {
+          this.wrappedInstance = ref;
+        };
+
+        Connect.prototype.initSelector = function initSelector() {
+          var sourceSelector = selectorFactory(this.store.dispatch, selectorFactoryOptions);
+          this.selector = makeSelectorStateful(sourceSelector, this.store);
+          this.selector.run(this.props);
+        };
+
+        Connect.prototype.initSubscription = function initSubscription() {
+          if (!shouldHandleStateChanges) return;
+          var parentSub = (this.propsMode ? this.props : this.context)[subscriptionKey];
+          this.subscription = new _Subscription2.default(this.store, parentSub, this.onStateChange.bind(this));
+          this.notifyNestedSubs = this.subscription.notifyNestedSubs.bind(this.subscription);
+        };
+
+        Connect.prototype.onStateChange = function onStateChange() {
+          this.selector.run(this.props);
+
+          if (!this.selector.shouldComponentUpdate) {
+            this.notifyNestedSubs();
+          } else {
+            this.componentDidUpdate = this.notifyNestedSubsOnComponentDidUpdate;
+            this.setState(dummyState);
+          }
+        };
+
+        Connect.prototype.notifyNestedSubsOnComponentDidUpdate = function notifyNestedSubsOnComponentDidUpdate() {
+          this.componentDidUpdate = undefined;
+          this.notifyNestedSubs();
+        };
+
+        Connect.prototype.isSubscribed = function isSubscribed() {
+          return Boolean(this.subscription) && this.subscription.isSubscribed();
+        };
+
+        Connect.prototype.addExtraProps = function addExtraProps(props) {
+          if (!withRef && !renderCountProp && !(this.propsMode && this.subscription)) return props;
+
+          var withExtras = _extends({}, props);
+
+          if (withRef) withExtras.ref = this.setWrappedInstance;
+          if (renderCountProp) withExtras[renderCountProp] = this.renderCount++;
+          if (this.propsMode && this.subscription) withExtras[subscriptionKey] = this.subscription;
+          return withExtras;
+        };
+
+        Connect.prototype.render = function render() {
+          var selector = this.selector;
+          selector.shouldComponentUpdate = false;
+
+          if (selector.error) {
+            throw selector.error;
+          } else {
+            return (0, _react.createElement)(WrappedComponent, this.addExtraProps(selector.props));
+          }
+        };
+
+        return Connect;
+      }(_react.Component);
+
+      Connect.WrappedComponent = WrappedComponent;
+      Connect.displayName = displayName;
+      Connect.childContextTypes = childContextTypes;
+      Connect.contextTypes = contextTypes;
+      Connect.propTypes = contextTypes;
+
+      if (process.env.NODE_ENV !== 'production') {
+        Connect.prototype.componentWillUpdate = function componentWillUpdate() {
+          var _this2 = this;
+
+          if (this.version !== version) {
+            this.version = version;
+            this.initSelector();
+            var oldListeners = [];
+
+            if (this.subscription) {
+              oldListeners = this.subscription.listeners.get();
+              this.subscription.tryUnsubscribe();
+            }
+
+            this.initSubscription();
+
+            if (shouldHandleStateChanges) {
+              this.subscription.trySubscribe();
+              oldListeners.forEach(function (listener) {
+                return _this2.subscription.listeners.subscribe(listener);
+              });
+            }
+          }
+        };
+      }
+
+      return (0, _hoistNonReactStatics2.default)(Connect, WrappedComponent);
+    };
+  }
+},494,[495,496,109,497,492],"react-redux/lib/components/connectAdvanced.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+    'use strict';
+
+    var REACT_STATICS = {
+        childContextTypes: true,
+        contextTypes: true,
+        defaultProps: true,
+        displayName: true,
+        getDefaultProps: true,
+        mixins: true,
+        propTypes: true,
+        type: true
+    };
+    var KNOWN_STATICS = {
+        name: true,
+        length: true,
+        prototype: true,
+        caller: true,
+        callee: true,
+        arguments: true,
+        arity: true
+    };
+    var defineProperty = Object.defineProperty;
+    var getOwnPropertyNames = Object.getOwnPropertyNames;
+    var getOwnPropertySymbols = Object.getOwnPropertySymbols;
+    var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+    var getPrototypeOf = Object.getPrototypeOf;
+    var objectPrototype = getPrototypeOf && getPrototypeOf(Object);
+
+    module.exports = function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+        if (typeof sourceComponent !== 'string') {
+            if (objectPrototype) {
+                var inheritedComponent = getPrototypeOf(sourceComponent);
+
+                if (inheritedComponent && inheritedComponent !== objectPrototype) {
+                    hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+                }
+            }
+
+            var keys = getOwnPropertyNames(sourceComponent);
+
+            if (getOwnPropertySymbols) {
+                keys = keys.concat(getOwnPropertySymbols(sourceComponent));
+            }
+
+            for (var i = 0; i < keys.length; ++i) {
+                var key = keys[i];
+
+                if (!REACT_STATICS[key] && !KNOWN_STATICS[key] && (!blacklist || !blacklist[key])) {
+                    var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+
+                    try {
+                        defineProperty(targetComponent, key, descriptor);
+                    } catch (e) {}
+                }
+            }
+
+            return targetComponent;
+        }
+
+        return targetComponent;
+    };
+},495,[],"hoist-non-react-statics/index.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  var invariant = function invariant(condition, format, a, b, c, d, e, f) {
+    if (process.env.NODE_ENV !== 'production') {
+      if (format === undefined) {
+        throw new Error('invariant requires an error message argument');
+      }
+    }
+
+    if (!condition) {
+      var error;
+
+      if (format === undefined) {
+        error = new Error('Minified exception occurred; use the non-minified dev environment ' + 'for the full error message and additional helpful warnings.');
+      } else {
+        var args = [a, b, c, d, e, f];
+        var argIndex = 0;
+        error = new Error(format.replace(/%s/g, function () {
+          return args[argIndex++];
+        }));
+        error.name = 'Invariant Violation';
+      }
+
+      error.framesToPop = 1;
+      throw error;
+    }
+  };
+
+  module.exports = invariant;
+},496,[],"invariant/browser.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  "use strict";
+
+  exports.__esModule = true;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
+  }
+
+  var CLEARED = null;
+  var nullListeners = {
+    notify: function notify() {}
+  };
+
+  function createListenerCollection() {
+    var current = [];
+    var next = [];
+    return {
+      clear: function clear() {
+        next = CLEARED;
+        current = CLEARED;
+      },
+      notify: function notify() {
+        var listeners = current = next;
+
+        for (var i = 0; i < listeners.length; i++) {
+          listeners[i]();
+        }
+      },
+      get: function get() {
+        return next;
+      },
+      subscribe: function subscribe(listener) {
+        var isSubscribed = true;
+        if (next === current) next = current.slice();
+        next.push(listener);
+        return function unsubscribe() {
+          if (!isSubscribed || current === CLEARED) return;
+          isSubscribed = false;
+          if (next === current) next = current.slice();
+          next.splice(next.indexOf(listener), 1);
+        };
+      }
+    };
+  }
+
+  var Subscription = function () {
+    function Subscription(store, parentSub, onStateChange) {
+      _classCallCheck(this, Subscription);
+
+      this.store = store;
+      this.parentSub = parentSub;
+      this.onStateChange = onStateChange;
+      this.unsubscribe = null;
+      this.listeners = nullListeners;
+    }
+
+    Subscription.prototype.addNestedSub = function addNestedSub(listener) {
+      this.trySubscribe();
+      return this.listeners.subscribe(listener);
+    };
+
+    Subscription.prototype.notifyNestedSubs = function notifyNestedSubs() {
+      this.listeners.notify();
+    };
+
+    Subscription.prototype.isSubscribed = function isSubscribed() {
+      return Boolean(this.unsubscribe);
+    };
+
+    Subscription.prototype.trySubscribe = function trySubscribe() {
+      if (!this.unsubscribe) {
+        this.unsubscribe = this.parentSub ? this.parentSub.addNestedSub(this.onStateChange) : this.store.subscribe(this.onStateChange);
+        this.listeners = createListenerCollection();
+      }
+    };
+
+    Subscription.prototype.tryUnsubscribe = function tryUnsubscribe() {
+      if (this.unsubscribe) {
+        this.unsubscribe();
+        this.unsubscribe = null;
+        this.listeners.clear();
+        this.listeners = nullListeners;
+      }
+    };
+
+    return Subscription;
+  }();
+
+  exports.default = Subscription;
+},497,[],"react-redux/lib/utils/Subscription.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  exports.createConnect = createConnect;
+
+  var _connectAdvanced = require(_dependencyMap[0], '../components/connectAdvanced');
+
+  var _connectAdvanced2 = _interopRequireDefault(_connectAdvanced);
+
+  var _shallowEqual = require(_dependencyMap[1], '../utils/shallowEqual');
+
+  var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
+
+  var _mapDispatchToProps = require(_dependencyMap[2], './mapDispatchToProps');
+
+  var _mapDispatchToProps2 = _interopRequireDefault(_mapDispatchToProps);
+
+  var _mapStateToProps = require(_dependencyMap[3], './mapStateToProps');
+
+  var _mapStateToProps2 = _interopRequireDefault(_mapStateToProps);
+
+  var _mergeProps = require(_dependencyMap[4], './mergeProps');
+
+  var _mergeProps2 = _interopRequireDefault(_mergeProps);
+
+  var _selectorFactory = require(_dependencyMap[5], './selectorFactory');
+
+  var _selectorFactory2 = _interopRequireDefault(_selectorFactory);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function _objectWithoutProperties(obj, keys) {
+    var target = {};
+
+    for (var i in obj) {
+      if (keys.indexOf(i) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+      target[i] = obj[i];
+    }
+
+    return target;
+  }
+
+  function match(arg, factories, name) {
+    for (var i = factories.length - 1; i >= 0; i--) {
+      var result = factories[i](arg);
+      if (result) return result;
+    }
+
+    return function (dispatch, options) {
+      throw new Error('Invalid value of type ' + typeof arg + ' for ' + name + ' argument when connecting component ' + options.wrappedComponentName + '.');
+    };
+  }
+
+  function strictEqual(a, b) {
+    return a === b;
+  }
+
+  function createConnect() {
+    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+        _ref$connectHOC = _ref.connectHOC,
+        connectHOC = _ref$connectHOC === undefined ? _connectAdvanced2.default : _ref$connectHOC,
+        _ref$mapStateToPropsF = _ref.mapStateToPropsFactories,
+        mapStateToPropsFactories = _ref$mapStateToPropsF === undefined ? _mapStateToProps2.default : _ref$mapStateToPropsF,
+        _ref$mapDispatchToPro = _ref.mapDispatchToPropsFactories,
+        mapDispatchToPropsFactories = _ref$mapDispatchToPro === undefined ? _mapDispatchToProps2.default : _ref$mapDispatchToPro,
+        _ref$mergePropsFactor = _ref.mergePropsFactories,
+        mergePropsFactories = _ref$mergePropsFactor === undefined ? _mergeProps2.default : _ref$mergePropsFactor,
+        _ref$selectorFactory = _ref.selectorFactory,
+        selectorFactory = _ref$selectorFactory === undefined ? _selectorFactory2.default : _ref$selectorFactory;
+
+    return function connect(mapStateToProps, mapDispatchToProps, mergeProps) {
+      var _ref2 = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {},
+          _ref2$pure = _ref2.pure,
+          pure = _ref2$pure === undefined ? true : _ref2$pure,
+          _ref2$areStatesEqual = _ref2.areStatesEqual,
+          areStatesEqual = _ref2$areStatesEqual === undefined ? strictEqual : _ref2$areStatesEqual,
+          _ref2$areOwnPropsEqua = _ref2.areOwnPropsEqual,
+          areOwnPropsEqual = _ref2$areOwnPropsEqua === undefined ? _shallowEqual2.default : _ref2$areOwnPropsEqua,
+          _ref2$areStatePropsEq = _ref2.areStatePropsEqual,
+          areStatePropsEqual = _ref2$areStatePropsEq === undefined ? _shallowEqual2.default : _ref2$areStatePropsEq,
+          _ref2$areMergedPropsE = _ref2.areMergedPropsEqual,
+          areMergedPropsEqual = _ref2$areMergedPropsE === undefined ? _shallowEqual2.default : _ref2$areMergedPropsE,
+          extraOptions = _objectWithoutProperties(_ref2, ['pure', 'areStatesEqual', 'areOwnPropsEqual', 'areStatePropsEqual', 'areMergedPropsEqual']);
+
+      var initMapStateToProps = match(mapStateToProps, mapStateToPropsFactories, 'mapStateToProps');
+      var initMapDispatchToProps = match(mapDispatchToProps, mapDispatchToPropsFactories, 'mapDispatchToProps');
+      var initMergeProps = match(mergeProps, mergePropsFactories, 'mergeProps');
+      return connectHOC(selectorFactory, _extends({
+        methodName: 'connect',
+        getDisplayName: function getDisplayName(name) {
+          return 'Connect(' + name + ')';
+        },
+        shouldHandleStateChanges: Boolean(mapStateToProps),
+        initMapStateToProps: initMapStateToProps,
+        initMapDispatchToProps: initMapDispatchToProps,
+        initMergeProps: initMergeProps,
+        pure: pure,
+        areStatesEqual: areStatesEqual,
+        areOwnPropsEqual: areOwnPropsEqual,
+        areStatePropsEqual: areStatePropsEqual,
+        areMergedPropsEqual: areMergedPropsEqual
+      }, extraOptions));
+    };
+  }
+
+  exports.default = createConnect();
+},498,[494,499,500,514,515,516],"react-redux/lib/connect/connect.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.default = shallowEqual;
+  var hasOwn = Object.prototype.hasOwnProperty;
+
+  function is(x, y) {
+    if (x === y) {
+      return x !== 0 || y !== 0 || 1 / x === 1 / y;
+    } else {
+      return x !== x && y !== y;
+    }
+  }
+
+  function shallowEqual(objA, objB) {
+    if (is(objA, objB)) return true;
+
+    if (typeof objA !== 'object' || objA === null || typeof objB !== 'object' || objB === null) {
+      return false;
+    }
+
+    var keysA = Object.keys(objA);
+    var keysB = Object.keys(objB);
+    if (keysA.length !== keysB.length) return false;
+
+    for (var i = 0; i < keysA.length; i++) {
+      if (!hasOwn.call(objB, keysA[i]) || !is(objA[keysA[i]], objB[keysA[i]])) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+},499,[],"react-redux/lib/utils/shallowEqual.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.whenMapDispatchToPropsIsFunction = whenMapDispatchToPropsIsFunction;
+  exports.whenMapDispatchToPropsIsMissing = whenMapDispatchToPropsIsMissing;
+  exports.whenMapDispatchToPropsIsObject = whenMapDispatchToPropsIsObject;
+
+  var _redux = require(_dependencyMap[0], 'redux');
+
+  var _wrapMapToProps = require(_dependencyMap[1], './wrapMapToProps');
+
+  function whenMapDispatchToPropsIsFunction(mapDispatchToProps) {
+    return typeof mapDispatchToProps === 'function' ? (0, _wrapMapToProps.wrapMapToPropsFunc)(mapDispatchToProps, 'mapDispatchToProps') : undefined;
+  }
+
+  function whenMapDispatchToPropsIsMissing(mapDispatchToProps) {
+    return !mapDispatchToProps ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function (dispatch) {
+      return {
+        dispatch: dispatch
+      };
+    }) : undefined;
+  }
+
+  function whenMapDispatchToPropsIsObject(mapDispatchToProps) {
+    return mapDispatchToProps && typeof mapDispatchToProps === 'object' ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function (dispatch) {
+      return (0, _redux.bindActionCreators)(mapDispatchToProps, dispatch);
+    }) : undefined;
+  }
+
+  exports.default = [whenMapDispatchToPropsIsFunction, whenMapDispatchToPropsIsMissing, whenMapDispatchToPropsIsObject];
+},500,[501,512],"react-redux/lib/connect/mapDispatchToProps.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
+
+  var _createStore = require(_dependencyMap[0], './createStore');
+
+  var _createStore2 = _interopRequireDefault(_createStore);
+
+  var _combineReducers = require(_dependencyMap[1], './combineReducers');
+
+  var _combineReducers2 = _interopRequireDefault(_combineReducers);
+
+  var _bindActionCreators = require(_dependencyMap[2], './bindActionCreators');
+
+  var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
+
+  var _applyMiddleware = require(_dependencyMap[3], './applyMiddleware');
+
+  var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
+
+  var _compose = require(_dependencyMap[4], './compose');
+
+  var _compose2 = _interopRequireDefault(_compose);
+
+  var _warning = require(_dependencyMap[5], './utils/warning');
+
+  var _warning2 = _interopRequireDefault(_warning);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      'default': obj
+    };
+  }
+
+  function isCrushed() {}
+
+  if (process.env.NODE_ENV !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+    (0, _warning2['default'])('You are currently using minified code outside of NODE_ENV === \'production\'. ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or DefinePlugin for webpack (http://stackoverflow.com/questions/30030031) ' + 'to ensure you have the correct code for your production build.');
+  }
+
+  exports.createStore = _createStore2['default'];
+  exports.combineReducers = _combineReducers2['default'];
+  exports.bindActionCreators = _bindActionCreators2['default'];
+  exports.applyMiddleware = _applyMiddleware2['default'];
+  exports.compose = _compose2['default'];
+},501,[502,507,509,510,511,508],"redux/lib/index.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.ActionTypes = undefined;
+  exports['default'] = createStore;
+
+  var _isPlainObject = require(_dependencyMap[0], 'lodash/isPlainObject');
+
+  var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+  var _symbolObservable = require(_dependencyMap[1], 'symbol-observable');
+
+  var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      'default': obj
+    };
+  }
+
+  var ActionTypes = exports.ActionTypes = {
+    INIT: '@@redux/INIT'
+  };
+
+  function createStore(reducer, preloadedState, enhancer) {
+    var _ref2;
+
+    if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+      enhancer = preloadedState;
+      preloadedState = undefined;
+    }
+
+    if (typeof enhancer !== 'undefined') {
+      if (typeof enhancer !== 'function') {
+        throw new Error('Expected the enhancer to be a function.');
+      }
+
+      return enhancer(createStore)(reducer, preloadedState);
+    }
+
+    if (typeof reducer !== 'function') {
+      throw new Error('Expected the reducer to be a function.');
+    }
+
+    var currentReducer = reducer;
+    var currentState = preloadedState;
+    var currentListeners = [];
+    var nextListeners = currentListeners;
+    var isDispatching = false;
+
+    function ensureCanMutateNextListeners() {
+      if (nextListeners === currentListeners) {
+        nextListeners = currentListeners.slice();
+      }
+    }
+
+    function getState() {
+      return currentState;
+    }
+
+    function subscribe(listener) {
+      if (typeof listener !== 'function') {
+        throw new Error('Expected listener to be a function.');
+      }
+
+      var isSubscribed = true;
+      ensureCanMutateNextListeners();
+      nextListeners.push(listener);
+      return function unsubscribe() {
+        if (!isSubscribed) {
+          return;
+        }
+
+        isSubscribed = false;
+        ensureCanMutateNextListeners();
+        var index = nextListeners.indexOf(listener);
+        nextListeners.splice(index, 1);
+      };
+    }
+
+    function dispatch(action) {
+      if (!(0, _isPlainObject2['default'])(action)) {
+        throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+      }
+
+      if (typeof action.type === 'undefined') {
+        throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+      }
+
+      if (isDispatching) {
+        throw new Error('Reducers may not dispatch actions.');
+      }
+
+      try {
+        isDispatching = true;
+        currentState = currentReducer(currentState, action);
+      } finally {
+        isDispatching = false;
+      }
+
+      var listeners = currentListeners = nextListeners;
+
+      for (var i = 0; i < listeners.length; i++) {
+        var listener = listeners[i];
+        listener();
+      }
+
+      return action;
+    }
+
+    function replaceReducer(nextReducer) {
+      if (typeof nextReducer !== 'function') {
+        throw new Error('Expected the nextReducer to be a function.');
+      }
+
+      currentReducer = nextReducer;
+      dispatch({
+        type: ActionTypes.INIT
+      });
+    }
+
+    function observable() {
+      var _ref;
+
+      var outerSubscribe = subscribe;
+      return _ref = {
+        subscribe: function subscribe(observer) {
+          if (typeof observer !== 'object') {
+            throw new TypeError('Expected the observer to be an object.');
+          }
+
+          function observeState() {
+            if (observer.next) {
+              observer.next(getState());
+            }
+          }
+
+          observeState();
+          var unsubscribe = outerSubscribe(observeState);
+          return {
+            unsubscribe: unsubscribe
+          };
+        }
+      }, _ref[_symbolObservable2['default']] = function () {
+        return this;
+      }, _ref;
+    }
+
+    dispatch({
+      type: ActionTypes.INIT
+    });
+    return _ref2 = {
+      dispatch: dispatch,
+      subscribe: subscribe,
+      getState: getState,
+      replaceReducer: replaceReducer
+    }, _ref2[_symbolObservable2['default']] = observable, _ref2;
+  }
+},502,[503,505],"redux/lib/createStore.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  var baseGetTag = require(_dependencyMap[0], './_baseGetTag'),
+      getPrototype = require(_dependencyMap[1], './_getPrototype'),
+      isObjectLike = require(_dependencyMap[2], './isObjectLike');
+
+  var objectTag = '[object Object]';
+  var funcProto = Function.prototype,
+      objectProto = Object.prototype;
+  var funcToString = funcProto.toString;
+  var hasOwnProperty = objectProto.hasOwnProperty;
+  var objectCtorString = funcToString.call(Object);
+
+  function isPlainObject(value) {
+    if (!isObjectLike(value) || baseGetTag(value) != objectTag) {
+      return false;
+    }
+
+    var proto = getPrototype(value);
+
+    if (proto === null) {
+      return true;
+    }
+
+    var Ctor = hasOwnProperty.call(proto, 'constructor') && proto.constructor;
+    return typeof Ctor == 'function' && Ctor instanceof Ctor && funcToString.call(Ctor) == objectCtorString;
+  }
+
+  module.exports = isPlainObject;
+},503,[155,504,206],"lodash/isPlainObject.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  var overArg = require(_dependencyMap[0], './_overArg');
+
+  var getPrototype = overArg(Object.getPrototypeOf, Object);
+  module.exports = getPrototype;
+},504,[218],"lodash/_getPrototype.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _ponyfill = require(_dependencyMap[0], './ponyfill.js');
+
+  var _ponyfill2 = _interopRequireDefault(_ponyfill);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      'default': obj
+    };
+  }
+
+  var root;
+
+  if (typeof self !== 'undefined') {
+    root = self;
+  } else if (typeof window !== 'undefined') {
+    root = window;
+  } else if (typeof global !== 'undefined') {
+    root = global;
+  } else if (typeof module !== 'undefined') {
+    root = module;
+  } else {
+    root = Function('return this')();
+  }
+
+  var result = (0, _ponyfill2['default'])(root);
+  exports['default'] = result;
+},505,[506],"symbol-observable/lib/index.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports['default'] = symbolObservablePonyfill;
+
+	function symbolObservablePonyfill(root) {
+		var result;
+		var _Symbol = root.Symbol;
+
+		if (typeof _Symbol === 'function') {
+			if (_Symbol.observable) {
+				result = _Symbol.observable;
+			} else {
+				result = _Symbol('observable');
+				_Symbol.observable = result;
+			}
+		} else {
+			result = '@@observable';
+		}
+
+		return result;
+	}
+
+	;
+},506,[],"symbol-observable/lib/ponyfill.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports['default'] = combineReducers;
+
+  var _createStore = require(_dependencyMap[0], './createStore');
+
+  var _isPlainObject = require(_dependencyMap[1], 'lodash/isPlainObject');
+
+  var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+  var _warning = require(_dependencyMap[2], './utils/warning');
+
+  var _warning2 = _interopRequireDefault(_warning);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      'default': obj
+    };
+  }
+
+  function getUndefinedStateErrorMessage(key, action) {
+    var actionType = action && action.type;
+    var actionName = actionType && '"' + actionType.toString() + '"' || 'an action';
+    return 'Given action ' + actionName + ', reducer "' + key + '" returned undefined. ' + 'To ignore an action, you must explicitly return the previous state. ' + 'If you want this reducer to hold no value, you can return null instead of undefined.';
+  }
+
+  function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+    var reducerKeys = Object.keys(reducers);
+    var argumentName = action && action.type === _createStore.ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+    if (reducerKeys.length === 0) {
+      return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+    }
+
+    if (!(0, _isPlainObject2['default'])(inputState)) {
+      return 'The ' + argumentName + ' has unexpected type of "' + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + '". Expected argument to be an object with the following ' + ('keys: "' + reducerKeys.join('", "') + '"');
+    }
+
+    var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+      return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+    });
+    unexpectedKeys.forEach(function (key) {
+      unexpectedKeyCache[key] = true;
+    });
+
+    if (unexpectedKeys.length > 0) {
+      return 'Unexpected ' + (unexpectedKeys.length > 1 ? 'keys' : 'key') + ' ' + ('"' + unexpectedKeys.join('", "') + '" found in ' + argumentName + '. ') + 'Expected to find one of the known reducer keys instead: ' + ('"' + reducerKeys.join('", "') + '". Unexpected keys will be ignored.');
+    }
+  }
+
+  function assertReducerShape(reducers) {
+    Object.keys(reducers).forEach(function (key) {
+      var reducer = reducers[key];
+      var initialState = reducer(undefined, {
+        type: _createStore.ActionTypes.INIT
+      });
+
+      if (typeof initialState === 'undefined') {
+        throw new Error('Reducer "' + key + '" returned undefined during initialization. ' + 'If the state passed to the reducer is undefined, you must ' + 'explicitly return the initial state. The initial state may ' + 'not be undefined. If you don\'t want to set a value for this reducer, ' + 'you can use null instead of undefined.');
+      }
+
+      var type = '@@redux/PROBE_UNKNOWN_ACTION_' + Math.random().toString(36).substring(7).split('').join('.');
+
+      if (typeof reducer(undefined, {
+        type: type
+      }) === 'undefined') {
+        throw new Error('Reducer "' + key + '" returned undefined when probed with a random type. ' + ('Don\'t try to handle ' + _createStore.ActionTypes.INIT + ' or other actions in "redux/*" ') + 'namespace. They are considered private. Instead, you must return the ' + 'current state for any unknown actions, unless it is undefined, ' + 'in which case you must return the initial state, regardless of the ' + 'action type. The initial state may not be undefined, but can be null.');
+      }
+    });
+  }
+
+  function combineReducers(reducers) {
+    var reducerKeys = Object.keys(reducers);
+    var finalReducers = {};
+
+    for (var i = 0; i < reducerKeys.length; i++) {
+      var key = reducerKeys[i];
+
+      if (process.env.NODE_ENV !== 'production') {
+        if (typeof reducers[key] === 'undefined') {
+          (0, _warning2['default'])('No reducer provided for key "' + key + '"');
+        }
+      }
+
+      if (typeof reducers[key] === 'function') {
+        finalReducers[key] = reducers[key];
+      }
+    }
+
+    var finalReducerKeys = Object.keys(finalReducers);
+    var unexpectedKeyCache = void 0;
+
+    if (process.env.NODE_ENV !== 'production') {
+      unexpectedKeyCache = {};
+    }
+
+    var shapeAssertionError = void 0;
+
+    try {
+      assertReducerShape(finalReducers);
+    } catch (e) {
+      shapeAssertionError = e;
+    }
+
+    return function combination() {
+      var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var action = arguments[1];
+
+      if (shapeAssertionError) {
+        throw shapeAssertionError;
+      }
+
+      if (process.env.NODE_ENV !== 'production') {
+        var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+
+        if (warningMessage) {
+          (0, _warning2['default'])(warningMessage);
+        }
+      }
+
+      var hasChanged = false;
+      var nextState = {};
+
+      for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+        var _key = finalReducerKeys[_i];
+        var reducer = finalReducers[_key];
+        var previousStateForKey = state[_key];
+        var nextStateForKey = reducer(previousStateForKey, action);
+
+        if (typeof nextStateForKey === 'undefined') {
+          var errorMessage = getUndefinedStateErrorMessage(_key, action);
+          throw new Error(errorMessage);
+        }
+
+        nextState[_key] = nextStateForKey;
+        hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+      }
+
+      return hasChanged ? nextState : state;
+    };
+  }
+},507,[502,503,508],"redux/lib/combineReducers.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports['default'] = warning;
+
+  function warning(message) {
+    if (typeof console !== 'undefined' && typeof console.error === 'function') {
+      console.error(message);
+    }
+
+    try {
+      throw new Error(message);
+    } catch (e) {}
+  }
+},508,[],"redux/lib/utils/warning.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports['default'] = bindActionCreators;
+
+  function bindActionCreator(actionCreator, dispatch) {
+    return function () {
+      return dispatch(actionCreator.apply(undefined, arguments));
+    };
+  }
+
+  function bindActionCreators(actionCreators, dispatch) {
+    if (typeof actionCreators === 'function') {
+      return bindActionCreator(actionCreators, dispatch);
+    }
+
+    if (typeof actionCreators !== 'object' || actionCreators === null) {
+      throw new Error('bindActionCreators expected an object or a function, instead received ' + (actionCreators === null ? 'null' : typeof actionCreators) + '. ' + 'Did you write "import ActionCreators from" instead of "import * as ActionCreators from"?');
+    }
+
+    var keys = Object.keys(actionCreators);
+    var boundActionCreators = {};
+
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+      var actionCreator = actionCreators[key];
+
+      if (typeof actionCreator === 'function') {
+        boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+      }
+    }
+
+    return boundActionCreators;
+  }
+},509,[],"redux/lib/bindActionCreators.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  exports['default'] = applyMiddleware;
+
+  var _compose = require(_dependencyMap[0], './compose');
+
+  var _compose2 = _interopRequireDefault(_compose);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      'default': obj
+    };
+  }
+
+  function applyMiddleware() {
+    for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
+      middlewares[_key] = arguments[_key];
+    }
+
+    return function (createStore) {
+      return function (reducer, preloadedState, enhancer) {
+        var store = createStore(reducer, preloadedState, enhancer);
+        var _dispatch = store.dispatch;
+        var chain = [];
+        var middlewareAPI = {
+          getState: store.getState,
+          dispatch: function dispatch(action) {
+            return _dispatch(action);
+          }
+        };
+        chain = middlewares.map(function (middleware) {
+          return middleware(middlewareAPI);
+        });
+        _dispatch = _compose2['default'].apply(undefined, chain)(store.dispatch);
+        return _extends({}, store, {
+          dispatch: _dispatch
+        });
+      };
+    };
+  }
+},510,[511],"redux/lib/applyMiddleware.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  "use strict";
+
+  exports.__esModule = true;
+  exports["default"] = compose;
+
+  function compose() {
+    for (var _len = arguments.length, funcs = Array(_len), _key = 0; _key < _len; _key++) {
+      funcs[_key] = arguments[_key];
+    }
+
+    if (funcs.length === 0) {
+      return function (arg) {
+        return arg;
+      };
+    }
+
+    if (funcs.length === 1) {
+      return funcs[0];
+    }
+
+    return funcs.reduce(function (a, b) {
+      return function () {
+        return a(b.apply(undefined, arguments));
+      };
+    });
+  }
+},511,[],"redux/lib/compose.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.wrapMapToPropsConstant = wrapMapToPropsConstant;
+  exports.getDependsOnOwnProps = getDependsOnOwnProps;
+  exports.wrapMapToPropsFunc = wrapMapToPropsFunc;
+
+  var _verifyPlainObject = require(_dependencyMap[0], '../utils/verifyPlainObject');
+
+  var _verifyPlainObject2 = _interopRequireDefault(_verifyPlainObject);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function wrapMapToPropsConstant(getConstant) {
+    return function initConstantSelector(dispatch, options) {
+      var constant = getConstant(dispatch, options);
+
+      function constantSelector() {
+        return constant;
+      }
+
+      constantSelector.dependsOnOwnProps = false;
+      return constantSelector;
+    };
+  }
+
+  function getDependsOnOwnProps(mapToProps) {
+    return mapToProps.dependsOnOwnProps !== null && mapToProps.dependsOnOwnProps !== undefined ? Boolean(mapToProps.dependsOnOwnProps) : mapToProps.length !== 1;
+  }
+
+  function wrapMapToPropsFunc(mapToProps, methodName) {
+    return function initProxySelector(dispatch, _ref) {
+      var displayName = _ref.displayName;
+
+      var proxy = function mapToPropsProxy(stateOrDispatch, ownProps) {
+        return proxy.dependsOnOwnProps ? proxy.mapToProps(stateOrDispatch, ownProps) : proxy.mapToProps(stateOrDispatch);
+      };
+
+      proxy.dependsOnOwnProps = true;
+
+      proxy.mapToProps = function detectFactoryAndVerify(stateOrDispatch, ownProps) {
+        proxy.mapToProps = mapToProps;
+        proxy.dependsOnOwnProps = getDependsOnOwnProps(mapToProps);
+        var props = proxy(stateOrDispatch, ownProps);
+
+        if (typeof props === 'function') {
+          proxy.mapToProps = props;
+          proxy.dependsOnOwnProps = getDependsOnOwnProps(props);
+          props = proxy(stateOrDispatch, ownProps);
+        }
+
+        if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject2.default)(props, displayName, methodName);
+        return props;
+      };
+
+      return proxy;
+    };
+  }
+},512,[513],"react-redux/lib/connect/wrapMapToProps.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.default = verifyPlainObject;
+
+  var _isPlainObject = require(_dependencyMap[0], 'lodash/isPlainObject');
+
+  var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
+
+  var _warning = require(_dependencyMap[1], './warning');
+
+  var _warning2 = _interopRequireDefault(_warning);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function verifyPlainObject(value, displayName, methodName) {
+    if (!(0, _isPlainObject2.default)(value)) {
+      (0, _warning2.default)(methodName + '() in ' + displayName + ' must return a plain object. Instead received ' + value + '.');
+    }
+  }
+},513,[503,493],"react-redux/lib/utils/verifyPlainObject.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.whenMapStateToPropsIsFunction = whenMapStateToPropsIsFunction;
+  exports.whenMapStateToPropsIsMissing = whenMapStateToPropsIsMissing;
+
+  var _wrapMapToProps = require(_dependencyMap[0], './wrapMapToProps');
+
+  function whenMapStateToPropsIsFunction(mapStateToProps) {
+    return typeof mapStateToProps === 'function' ? (0, _wrapMapToProps.wrapMapToPropsFunc)(mapStateToProps, 'mapStateToProps') : undefined;
+  }
+
+  function whenMapStateToPropsIsMissing(mapStateToProps) {
+    return !mapStateToProps ? (0, _wrapMapToProps.wrapMapToPropsConstant)(function () {
+      return {};
+    }) : undefined;
+  }
+
+  exports.default = [whenMapStateToPropsIsFunction, whenMapStateToPropsIsMissing];
+},514,[512],"react-redux/lib/connect/mapStateToProps.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+
+  var _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  exports.defaultMergeProps = defaultMergeProps;
+  exports.wrapMergePropsFunc = wrapMergePropsFunc;
+  exports.whenMergePropsIsFunction = whenMergePropsIsFunction;
+  exports.whenMergePropsIsOmitted = whenMergePropsIsOmitted;
+
+  var _verifyPlainObject = require(_dependencyMap[0], '../utils/verifyPlainObject');
+
+  var _verifyPlainObject2 = _interopRequireDefault(_verifyPlainObject);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function defaultMergeProps(stateProps, dispatchProps, ownProps) {
+    return _extends({}, ownProps, stateProps, dispatchProps);
+  }
+
+  function wrapMergePropsFunc(mergeProps) {
+    return function initMergePropsProxy(dispatch, _ref) {
+      var displayName = _ref.displayName,
+          pure = _ref.pure,
+          areMergedPropsEqual = _ref.areMergedPropsEqual;
+      var hasRunOnce = false;
+      var mergedProps = void 0;
+      return function mergePropsProxy(stateProps, dispatchProps, ownProps) {
+        var nextMergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+
+        if (hasRunOnce) {
+          if (!pure || !areMergedPropsEqual(nextMergedProps, mergedProps)) mergedProps = nextMergedProps;
+        } else {
+          hasRunOnce = true;
+          mergedProps = nextMergedProps;
+          if (process.env.NODE_ENV !== 'production') (0, _verifyPlainObject2.default)(mergedProps, displayName, 'mergeProps');
+        }
+
+        return mergedProps;
+      };
+    };
+  }
+
+  function whenMergePropsIsFunction(mergeProps) {
+    return typeof mergeProps === 'function' ? wrapMergePropsFunc(mergeProps) : undefined;
+  }
+
+  function whenMergePropsIsOmitted(mergeProps) {
+    return !mergeProps ? function () {
+      return defaultMergeProps;
+    } : undefined;
+  }
+
+  exports.default = [whenMergePropsIsFunction, whenMergePropsIsOmitted];
+},515,[513],"react-redux/lib/connect/mergeProps.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.impureFinalPropsSelectorFactory = impureFinalPropsSelectorFactory;
+  exports.pureFinalPropsSelectorFactory = pureFinalPropsSelectorFactory;
+  exports.default = finalPropsSelectorFactory;
+
+  var _verifySubselectors = require(_dependencyMap[0], './verifySubselectors');
+
+  var _verifySubselectors2 = _interopRequireDefault(_verifySubselectors);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function _objectWithoutProperties(obj, keys) {
+    var target = {};
+
+    for (var i in obj) {
+      if (keys.indexOf(i) >= 0) continue;
+      if (!Object.prototype.hasOwnProperty.call(obj, i)) continue;
+      target[i] = obj[i];
+    }
+
+    return target;
+  }
+
+  function impureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch) {
+    return function impureFinalPropsSelector(state, ownProps) {
+      return mergeProps(mapStateToProps(state, ownProps), mapDispatchToProps(dispatch, ownProps), ownProps);
+    };
+  }
+
+  function pureFinalPropsSelectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, _ref) {
+    var areStatesEqual = _ref.areStatesEqual,
+        areOwnPropsEqual = _ref.areOwnPropsEqual,
+        areStatePropsEqual = _ref.areStatePropsEqual;
+    var hasRunAtLeastOnce = false;
+    var state = void 0;
+    var ownProps = void 0;
+    var stateProps = void 0;
+    var dispatchProps = void 0;
+    var mergedProps = void 0;
+
+    function handleFirstCall(firstState, firstOwnProps) {
+      state = firstState;
+      ownProps = firstOwnProps;
+      stateProps = mapStateToProps(state, ownProps);
+      dispatchProps = mapDispatchToProps(dispatch, ownProps);
+      mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      hasRunAtLeastOnce = true;
+      return mergedProps;
+    }
+
+    function handleNewPropsAndNewState() {
+      stateProps = mapStateToProps(state, ownProps);
+      if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+      mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      return mergedProps;
+    }
+
+    function handleNewProps() {
+      if (mapStateToProps.dependsOnOwnProps) stateProps = mapStateToProps(state, ownProps);
+      if (mapDispatchToProps.dependsOnOwnProps) dispatchProps = mapDispatchToProps(dispatch, ownProps);
+      mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      return mergedProps;
+    }
+
+    function handleNewState() {
+      var nextStateProps = mapStateToProps(state, ownProps);
+      var statePropsChanged = !areStatePropsEqual(nextStateProps, stateProps);
+      stateProps = nextStateProps;
+      if (statePropsChanged) mergedProps = mergeProps(stateProps, dispatchProps, ownProps);
+      return mergedProps;
+    }
+
+    function handleSubsequentCalls(nextState, nextOwnProps) {
+      var propsChanged = !areOwnPropsEqual(nextOwnProps, ownProps);
+      var stateChanged = !areStatesEqual(nextState, state);
+      state = nextState;
+      ownProps = nextOwnProps;
+      if (propsChanged && stateChanged) return handleNewPropsAndNewState();
+      if (propsChanged) return handleNewProps();
+      if (stateChanged) return handleNewState();
+      return mergedProps;
+    }
+
+    return function pureFinalPropsSelector(nextState, nextOwnProps) {
+      return hasRunAtLeastOnce ? handleSubsequentCalls(nextState, nextOwnProps) : handleFirstCall(nextState, nextOwnProps);
+    };
+  }
+
+  function finalPropsSelectorFactory(dispatch, _ref2) {
+    var initMapStateToProps = _ref2.initMapStateToProps,
+        initMapDispatchToProps = _ref2.initMapDispatchToProps,
+        initMergeProps = _ref2.initMergeProps,
+        options = _objectWithoutProperties(_ref2, ['initMapStateToProps', 'initMapDispatchToProps', 'initMergeProps']);
+
+    var mapStateToProps = initMapStateToProps(dispatch, options);
+    var mapDispatchToProps = initMapDispatchToProps(dispatch, options);
+    var mergeProps = initMergeProps(dispatch, options);
+
+    if (process.env.NODE_ENV !== 'production') {
+      (0, _verifySubselectors2.default)(mapStateToProps, mapDispatchToProps, mergeProps, options.displayName);
+    }
+
+    var selectorFactory = options.pure ? pureFinalPropsSelectorFactory : impureFinalPropsSelectorFactory;
+    return selectorFactory(mapStateToProps, mapDispatchToProps, mergeProps, dispatch, options);
+  }
+},516,[517],"react-redux/lib/connect/selectorFactory.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  'use strict';
+
+  exports.__esModule = true;
+  exports.default = verifySubselectors;
+
+  var _warning = require(_dependencyMap[0], '../utils/warning');
+
+  var _warning2 = _interopRequireDefault(_warning);
+
+  function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+      default: obj
+    };
+  }
+
+  function verify(selector, methodName, displayName) {
+    if (!selector) {
+      throw new Error('Unexpected value for ' + methodName + ' in ' + displayName + '.');
+    } else if (methodName === 'mapStateToProps' || methodName === 'mapDispatchToProps') {
+      if (!selector.hasOwnProperty('dependsOnOwnProps')) {
+        (0, _warning2.default)('The selector for ' + methodName + ' of ' + displayName + ' did not specify a value for dependsOnOwnProps.');
+      }
+    }
+  }
+
+  function verifySubselectors(mapStateToProps, mapDispatchToProps, mergeProps, displayName) {
+    verify(mapStateToProps, 'mapStateToProps', displayName);
+    verify(mapDispatchToProps, 'mapDispatchToProps', displayName);
+    verify(mergeProps, 'mergeProps', displayName);
+  }
+},517,[493],"react-redux/lib/connect/verifySubselectors.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _react2 = require(_dependencyMap[0], "react");
+
+  var _react3 = _interopRequireDefault(_react2);
+
+  var _index = require(_dependencyMap[1], "./../../node_modules/react-transform-hmr/lib/index.js");
+
+  var _index2 = _interopRequireDefault(_index);
+
+  var _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/containers/ConvertScreen.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _reactNative = require(_dependencyMap[2], "react-native");
+
+  var _Styles = require(_dependencyMap[3], "../Styles");
+
+  var _Styles2 = _interopRequireDefault(_Styles);
+
+  var _ConvertColumn = require(_dependencyMap[4], "../components/ConvertColumn");
+
+  var _ConvertColumn2 = _interopRequireDefault(_ConvertColumn);
+
+  var _database = require(_dependencyMap[5], "../database.json");
+
+  var _reactRedux = require(_dependencyMap[6], "react-redux");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var _components = {
+    ConvertScreen: {
+      displayName: "ConvertScreen"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: "/Users/ducnt/Documents/ReactNative/Converter/src/containers/ConvertScreen.js",
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var ConvertScreen = _wrapComponent("ConvertScreen")(function (_Component) {
+    _inherits(ConvertScreen, _Component);
+
+    function ConvertScreen() {
+      var _ref;
+
+      var _temp, _this, _ret;
+
+      _classCallCheck(this, ConvertScreen);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ConvertScreen.__proto__ || Object.getPrototypeOf(ConvertScreen)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
+        items: _database.categories[_this.props.category].items
+      }, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    _createClass(ConvertScreen, [{
+      key: "render",
+      value: function render() {
+        return _react3.default.createElement(
+          _reactNative.View,
+          {
+            style: {
+              flex: 1
+            },
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 30
+            }
+          },
+          _react3.default.createElement(_reactNative.Button, {
+            title: "Toggle Screen",
+            onPress: this.props.toggleScreen,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 31
+            }
+          }),
+          _react3.default.createElement(
+            _reactNative.View,
+            {
+              style: [_Styles2.default.bgPrimary3, _Styles2.default.container, styles.appContainer],
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 32
+              }
+            },
+            _react3.default.createElement(_ConvertColumn2.default, {
+              items: this.state.items,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 33
+              }
+            }),
+            _react3.default.createElement(_ConvertColumn2.default, {
+              items: this.state.items,
+              __source: {
+                fileName: _jsxFileName,
+                lineNumber: 36
+              }
+            })
+          )
+        );
+      }
+    }]);
+
+    return ConvertScreen;
+  }(_react2.Component));
 
   var styles = _reactNative.StyleSheet.create({
     appContainer: {
@@ -58659,7 +60576,15 @@ __d(function (global, require, module, exports, _dependencyMap) {
       flexDirection: "row"
     }
   });
-},489,[109,128,12,492,490,491],"Converter/src/App.js");
+
+  var mapAppStateToProps = function mapAppStateToProps(state) {
+    return {
+      category: state.category
+    };
+  };
+
+  exports.default = (0, _reactRedux.connect)(mapAppStateToProps)(ConvertScreen);
+},518,[109,128,12,519,520,526,490],"Convertable/src/containers/ConvertScreen.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -58690,7 +60615,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
       fontSize: 24
     }
   });
-},490,[12],"Converter/src/Styles.js");
+},519,[12],"Convertable/src/Styles.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -58710,19 +60635,19 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _reactNative = require(_dependencyMap[2], "react-native");
 
-  var _big = require(_dependencyMap[3], "big.js");
+  var _reactRedux = require(_dependencyMap[3], "react-redux");
 
-  var _big2 = _interopRequireDefault(_big);
+  var _actions = require(_dependencyMap[4], "../actions/");
 
-  var _Styles = require(_dependencyMap[4], "../Styles");
+  var _Styles = require(_dependencyMap[5], "../Styles");
 
   var _Styles2 = _interopRequireDefault(_Styles);
 
-  var _UnitDisplay = require(_dependencyMap[5], "./UnitDisplay");
+  var _UnitDisplay = require(_dependencyMap[6], "./UnitDisplay");
 
   var _UnitDisplay2 = _interopRequireDefault(_UnitDisplay);
 
-  var _UnitList = require(_dependencyMap[6], "./UnitList");
+  var _UnitList = require(_dependencyMap[7], "./UnitList");
 
   var _UnitList2 = _interopRequireDefault(_UnitList);
 
@@ -58778,9 +60703,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
           return item.id === _this.state.currentUnitId;
         })[0];
 
-        var newBase = (0, _big2.default)(text || 0).times(currentItem.ratio);
-
-        _this.props.updateBaseValue(newBase);
+        _this.props.changeBaseValue(parseFloat(text || 0) * currentItem.ratio);
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
@@ -58792,23 +60715,22 @@ __d(function (global, require, module, exports, _dependencyMap) {
         var currentItem = this.props.items.filter(function (item) {
           return item.id === _this2.state.currentUnitId;
         })[0];
-        var newValue = (0, _big2.default)(this.props.baseValue).div(currentItem.ratio);
         return _react3.default.createElement(
           _reactNative.View,
           {
             style: [styles.column],
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 39
+              lineNumber: 41
             }
           },
           _react3.default.createElement(_UnitDisplay2.default, {
             title: currentItem.title,
-            value: newValue,
+            value: this.props.baseValue / currentItem.ratio,
             onChange: this._onChangeText,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 40
+              lineNumber: 42
             }
           }),
           _react3.default.createElement(_UnitList2.default, {
@@ -58817,7 +60739,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             onChangeUnitId: this._onChangeUnitId,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 45
+              lineNumber: 47
             }
           })
         );
@@ -58833,632 +60755,51 @@ __d(function (global, require, module, exports, _dependencyMap) {
     }
   });
 
-  exports.default = ConvertColumn;
-},491,[109,128,12,492,490,493,494],"Converter/src/components/ConvertColumn.js");
+  var mapAppStateToProps = function mapAppStateToProps(state) {
+    return {
+      baseValue: state.baseValue
+    };
+  };
+
+  var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+      changeBaseValue: function changeBaseValue(newValue) {
+        return dispatch((0, _actions.createBaseValueAction)(newValue));
+      }
+    };
+  };
+
+  exports.default = (0, _reactRedux.connect)(mapAppStateToProps, mapDispatchToProps)(ConvertColumn);
+},520,[109,128,12,490,521,519,523,524],"Convertable/src/components/ConvertColumn.js");
 __d(function (global, require, module, exports, _dependencyMap) {
-  ;
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  exports.createCategoryAction = exports.createBaseValueAction = undefined;
 
-  (function (GLOBAL) {
-    'use strict';
+  var _types = require(_dependencyMap[0], "./types");
 
-    var Big,
-        DP = 20,
-        RM = 1,
-        MAX_DP = 1E6,
-        MAX_POWER = 1E6,
-        NE = -7,
-        PE = 21,
-        NAME = '[big.js] ',
-        INVALID = NAME + 'Invalid ',
-        INVALID_DP = INVALID + 'decimal places',
-        INVALID_RM = INVALID + 'rounding mode',
-        DIV_BY_ZERO = NAME + 'Division by zero',
-        P = {},
-        UNDEFINED = void 0,
-        NUMERIC = /^-?(\d+(\.\d*)?|\.\d+)(e[+-]?\d+)?$/i;
-
-    function _Big_() {
-      function Big(n) {
-        var x = this;
-        if (!(x instanceof Big)) return n === UNDEFINED ? _Big_() : new Big(n);
-
-        if (n instanceof Big) {
-          x.s = n.s;
-          x.e = n.e;
-          x.c = n.c.slice();
-        } else {
-          parse(x, n);
-        }
-
-        x.constructor = Big;
-      }
-
-      Big.prototype = P;
-      Big.DP = DP;
-      Big.RM = RM;
-      Big.NE = NE;
-      Big.PE = PE;
-      Big.version = '5.0.2';
-      return Big;
-    }
-
-    function parse(x, n) {
-      var e, i, nl;
-      if (n === 0 && 1 / n < 0) n = '-0';else if (!NUMERIC.test(n += '')) throw Error(INVALID + 'number');
-      x.s = n.charAt(0) == '-' ? (n = n.slice(1), -1) : 1;
-      if ((e = n.indexOf('.')) > -1) n = n.replace('.', '');
-
-      if ((i = n.search(/e/i)) > 0) {
-        if (e < 0) e = i;
-        e += +n.slice(i + 1);
-        n = n.substring(0, i);
-      } else if (e < 0) {
-        e = n.length;
-      }
-
-      nl = n.length;
-
-      for (i = 0; i < nl && n.charAt(i) == '0';) {
-        ++i;
-      }
-
-      if (i == nl) {
-        x.c = [x.e = 0];
-      } else {
-        for (; nl > 0 && n.charAt(--nl) == '0';) {}
-
-        x.e = e - i - 1;
-        x.c = [];
-
-        for (e = 0; i <= nl;) {
-          x.c[e++] = +n.charAt(i++);
-        }
-      }
-
-      return x;
-    }
-
-    function round(x, dp, rm, more) {
-      var xc = x.c,
-          i = x.e + dp + 1;
-
-      if (i < xc.length) {
-        if (rm === 1) {
-          more = xc[i] >= 5;
-        } else if (rm === 2) {
-          more = xc[i] > 5 || xc[i] == 5 && (more || i < 0 || xc[i + 1] !== UNDEFINED || xc[i - 1] & 1);
-        } else if (rm === 3) {
-          more = more || xc[i] !== UNDEFINED || i < 0;
-        } else {
-          more = false;
-          if (rm !== 0) throw Error(INVALID_RM);
-        }
-
-        if (i < 1) {
-          xc.length = 1;
-
-          if (more) {
-            x.e = -dp;
-            xc[0] = 1;
-          } else {
-            xc[0] = x.e = 0;
-          }
-        } else {
-          xc.length = i--;
-
-          if (more) {
-            for (; ++xc[i] > 9;) {
-              xc[i] = 0;
-
-              if (!i--) {
-                ++x.e;
-                xc.unshift(1);
-              }
-            }
-          }
-
-          for (i = xc.length; !xc[--i];) {
-            xc.pop();
-          }
-        }
-      } else if (rm < 0 || rm > 3 || rm !== ~~rm) {
-        throw Error(INVALID_RM);
-      }
-
-      return x;
-    }
-
-    function stringify(x, id, n, k) {
-      var e,
-          s,
-          Big = x.constructor,
-          z = !x.c[0];
-
-      if (n !== UNDEFINED) {
-        if (n !== ~~n || n < (id == 3) || n > MAX_DP) {
-          throw Error(id == 3 ? INVALID + 'precision' : INVALID_DP);
-        }
-
-        x = new Big(x);
-        n = k - x.e;
-        if (x.c.length > ++k) round(x, n, Big.RM);
-        if (id == 2) k = x.e + n + 1;
-
-        for (; x.c.length < k;) {
-          x.c.push(0);
-        }
-      }
-
-      e = x.e;
-      s = x.c.join('');
-      n = s.length;
-
-      if (id != 2 && (id == 1 || id == 3 && k <= e || e <= Big.NE || e >= Big.PE)) {
-        s = s.charAt(0) + (n > 1 ? '.' + s.slice(1) : '') + (e < 0 ? 'e' : 'e+') + e;
-      } else if (e < 0) {
-        for (; ++e;) {
-          s = '0' + s;
-        }
-
-        s = '0.' + s;
-      } else if (e > 0) {
-        if (++e > n) for (e -= n; e--;) {
-          s += '0';
-        } else if (e < n) s = s.slice(0, e) + '.' + s.slice(e);
-      } else if (n > 1) {
-        s = s.charAt(0) + '.' + s.slice(1);
-      }
-
-      return x.s < 0 && (!z || id == 4) ? '-' + s : s;
-    }
-
-    P.abs = function () {
-      var x = new this.constructor(this);
-      x.s = 1;
-      return x;
+  var createBaseValueAction = exports.createBaseValueAction = function createBaseValueAction(newValue) {
+    return {
+      type: _types.CHANGE_BASE_VALUE,
+      payload: newValue
     };
+  };
 
-    P.cmp = function (y) {
-      var isneg,
-          x = this,
-          xc = x.c,
-          yc = (y = new x.constructor(y)).c,
-          i = x.s,
-          j = y.s,
-          k = x.e,
-          l = y.e;
-      if (!xc[0] || !yc[0]) return !xc[0] ? !yc[0] ? 0 : -j : i;
-      if (i != j) return i;
-      isneg = i < 0;
-      if (k != l) return k > l ^ isneg ? 1 : -1;
-      j = (k = xc.length) < (l = yc.length) ? k : l;
-
-      for (i = -1; ++i < j;) {
-        if (xc[i] != yc[i]) return xc[i] > yc[i] ^ isneg ? 1 : -1;
-      }
-
-      return k == l ? 0 : k > l ^ isneg ? 1 : -1;
+  var createCategoryAction = exports.createCategoryAction = function createCategoryAction(newCategory) {
+    return {
+      type: _types.CHANGE_CATEGORY_ID,
+      payload: newCategory
     };
-
-    P.div = function (y) {
-      var x = this,
-          Big = x.constructor,
-          a = x.c,
-          b = (y = new Big(y)).c,
-          k = x.s == y.s ? 1 : -1,
-          dp = Big.DP;
-      if (dp !== ~~dp || dp < 0 || dp > MAX_DP) throw Error(INVALID_DP);
-      if (!b[0]) throw Error(DIV_BY_ZERO);
-      if (!a[0]) return new Big(k * 0);
-      var bl,
-          bt,
-          n,
-          cmp,
-          ri,
-          bz = b.slice(),
-          ai = bl = b.length,
-          al = a.length,
-          r = a.slice(0, bl),
-          rl = r.length,
-          q = y,
-          qc = q.c = [],
-          qi = 0,
-          d = dp + (q.e = x.e - y.e) + 1;
-      q.s = k;
-      k = d < 0 ? 0 : d;
-      bz.unshift(0);
-
-      for (; rl++ < bl;) {
-        r.push(0);
-      }
-
-      do {
-        for (n = 0; n < 10; n++) {
-          if (bl != (rl = r.length)) {
-            cmp = bl > rl ? 1 : -1;
-          } else {
-            for (ri = -1, cmp = 0; ++ri < bl;) {
-              if (b[ri] != r[ri]) {
-                cmp = b[ri] > r[ri] ? 1 : -1;
-                break;
-              }
-            }
-          }
-
-          if (cmp < 0) {
-            for (bt = rl == bl ? b : bz; rl;) {
-              if (r[--rl] < bt[rl]) {
-                ri = rl;
-
-                for (; ri && !r[--ri];) {
-                  r[ri] = 9;
-                }
-
-                --r[ri];
-                r[rl] += 10;
-              }
-
-              r[rl] -= bt[rl];
-            }
-
-            for (; !r[0];) {
-              r.shift();
-            }
-          } else {
-            break;
-          }
-        }
-
-        qc[qi++] = cmp ? n : ++n;
-        if (r[0] && cmp) r[rl] = a[ai] || 0;else r = [a[ai]];
-      } while ((ai++ < al || r[0] !== UNDEFINED) && k--);
-
-      if (!qc[0] && qi != 1) {
-        qc.shift();
-        q.e--;
-      }
-
-      if (qi > d) round(q, dp, Big.RM, r[0] !== UNDEFINED);
-      return q;
-    };
-
-    P.eq = function (y) {
-      return !this.cmp(y);
-    };
-
-    P.gt = function (y) {
-      return this.cmp(y) > 0;
-    };
-
-    P.gte = function (y) {
-      return this.cmp(y) > -1;
-    };
-
-    P.lt = function (y) {
-      return this.cmp(y) < 0;
-    };
-
-    P.lte = function (y) {
-      return this.cmp(y) < 1;
-    };
-
-    P.minus = P.sub = function (y) {
-      var i,
-          j,
-          t,
-          xlty,
-          x = this,
-          Big = x.constructor,
-          a = x.s,
-          b = (y = new Big(y)).s;
-
-      if (a != b) {
-        y.s = -b;
-        return x.plus(y);
-      }
-
-      var xc = x.c.slice(),
-          xe = x.e,
-          yc = y.c,
-          ye = y.e;
-
-      if (!xc[0] || !yc[0]) {
-        return yc[0] ? (y.s = -b, y) : new Big(xc[0] ? x : 0);
-      }
-
-      if (a = xe - ye) {
-        if (xlty = a < 0) {
-          a = -a;
-          t = xc;
-        } else {
-          ye = xe;
-          t = yc;
-        }
-
-        t.reverse();
-
-        for (b = a; b--;) {
-          t.push(0);
-        }
-
-        t.reverse();
-      } else {
-        j = ((xlty = xc.length < yc.length) ? xc : yc).length;
-
-        for (a = b = 0; b < j; b++) {
-          if (xc[b] != yc[b]) {
-            xlty = xc[b] < yc[b];
-            break;
-          }
-        }
-      }
-
-      if (xlty) {
-        t = xc;
-        xc = yc;
-        yc = t;
-        y.s = -y.s;
-      }
-
-      if ((b = (j = yc.length) - (i = xc.length)) > 0) for (; b--;) {
-        xc[i++] = 0;
-      }
-
-      for (b = i; j > a;) {
-        if (xc[--j] < yc[j]) {
-          for (i = j; i && !xc[--i];) {
-            xc[i] = 9;
-          }
-
-          --xc[i];
-          xc[j] += 10;
-        }
-
-        xc[j] -= yc[j];
-      }
-
-      for (; xc[--b] === 0;) {
-        xc.pop();
-      }
-
-      for (; xc[0] === 0;) {
-        xc.shift();
-        --ye;
-      }
-
-      if (!xc[0]) {
-        y.s = 1;
-        xc = [ye = 0];
-      }
-
-      y.c = xc;
-      y.e = ye;
-      return y;
-    };
-
-    P.mod = function (y) {
-      var ygtx,
-          x = this,
-          Big = x.constructor,
-          a = x.s,
-          b = (y = new Big(y)).s;
-      if (!y.c[0]) throw Error(DIV_BY_ZERO);
-      x.s = y.s = 1;
-      ygtx = y.cmp(x) == 1;
-      x.s = a;
-      y.s = b;
-      if (ygtx) return new Big(x);
-      a = Big.DP;
-      b = Big.RM;
-      Big.DP = Big.RM = 0;
-      x = x.div(y);
-      Big.DP = a;
-      Big.RM = b;
-      return this.minus(x.times(y));
-    };
-
-    P.plus = P.add = function (y) {
-      var t,
-          x = this,
-          Big = x.constructor,
-          a = x.s,
-          b = (y = new Big(y)).s;
-
-      if (a != b) {
-        y.s = -b;
-        return x.minus(y);
-      }
-
-      var xe = x.e,
-          xc = x.c,
-          ye = y.e,
-          yc = y.c;
-      if (!xc[0] || !yc[0]) return yc[0] ? y : new Big(xc[0] ? x : a * 0);
-      xc = xc.slice();
-
-      if (a = xe - ye) {
-        if (a > 0) {
-          ye = xe;
-          t = yc;
-        } else {
-          a = -a;
-          t = xc;
-        }
-
-        t.reverse();
-
-        for (; a--;) {
-          t.push(0);
-        }
-
-        t.reverse();
-      }
-
-      if (xc.length - yc.length < 0) {
-        t = yc;
-        yc = xc;
-        xc = t;
-      }
-
-      a = yc.length;
-
-      for (b = 0; a; xc[a] %= 10) {
-        b = (xc[--a] = xc[a] + yc[a] + b) / 10 | 0;
-      }
-
-      if (b) {
-        xc.unshift(b);
-        ++ye;
-      }
-
-      for (a = xc.length; xc[--a] === 0;) {
-        xc.pop();
-      }
-
-      y.c = xc;
-      y.e = ye;
-      return y;
-    };
-
-    P.pow = function (n) {
-      var x = this,
-          one = new x.constructor(1),
-          y = one,
-          isneg = n < 0;
-      if (n !== ~~n || n < -MAX_POWER || n > MAX_POWER) throw Error(INVALID + 'exponent');
-      if (isneg) n = -n;
-
-      for (;;) {
-        if (n & 1) y = y.times(x);
-        n >>= 1;
-        if (!n) break;
-        x = x.times(x);
-      }
-
-      return isneg ? one.div(y) : y;
-    };
-
-    P.round = function (dp, rm) {
-      var Big = this.constructor;
-      if (dp === UNDEFINED) dp = 0;else if (dp !== ~~dp || dp < 0 || dp > MAX_DP) throw Error(INVALID_DP);
-      return round(new Big(this), dp, rm === UNDEFINED ? Big.RM : rm);
-    };
-
-    P.sqrt = function () {
-      var r,
-          c,
-          t,
-          x = this,
-          Big = x.constructor,
-          s = x.s,
-          e = x.e,
-          half = new Big(0.5);
-      if (!x.c[0]) return new Big(x);
-      if (s < 0) throw Error(NAME + 'No square root');
-      s = Math.sqrt(x.toString());
-
-      if (s === 0 || s === 1 / 0) {
-        c = x.c.join('');
-        if (!(c.length + e & 1)) c += '0';
-        r = new Big(Math.sqrt(c).toString());
-        r.e = ((e + 1) / 2 | 0) - (e < 0 || e & 1);
-      } else {
-        r = new Big(s.toString());
-      }
-
-      e = r.e + (Big.DP += 4);
-
-      do {
-        t = r;
-        r = half.times(t.plus(x.div(t)));
-      } while (t.c.slice(0, e).join('') !== r.c.slice(0, e).join(''));
-
-      return round(r, Big.DP -= 4, Big.RM);
-    };
-
-    P.times = P.mul = function (y) {
-      var c,
-          x = this,
-          Big = x.constructor,
-          xc = x.c,
-          yc = (y = new Big(y)).c,
-          a = xc.length,
-          b = yc.length,
-          i = x.e,
-          j = y.e;
-      y.s = x.s == y.s ? 1 : -1;
-      if (!xc[0] || !yc[0]) return new Big(y.s * 0);
-      y.e = i + j;
-
-      if (a < b) {
-        c = xc;
-        xc = yc;
-        yc = c;
-        j = a;
-        a = b;
-        b = j;
-      }
-
-      for (c = new Array(j = a + b); j--;) {
-        c[j] = 0;
-      }
-
-      for (i = b; i--;) {
-        b = 0;
-
-        for (j = a + i; j > i;) {
-          b = c[j] + yc[i] * xc[j - i - 1] + b;
-          c[j--] = b % 10;
-          b = b / 10 | 0;
-        }
-
-        c[j] = (c[j] + b) % 10;
-      }
-
-      if (b) ++y.e;else c.shift();
-
-      for (i = c.length; !c[--i];) {
-        c.pop();
-      }
-
-      y.c = c;
-      return y;
-    };
-
-    P.toExponential = function (dp) {
-      return stringify(this, 1, dp, dp);
-    };
-
-    P.toFixed = function (dp) {
-      return stringify(this, 2, dp, this.e + dp);
-    };
-
-    P.toPrecision = function (sd) {
-      return stringify(this, 3, sd, sd - 1);
-    };
-
-    P.toString = function () {
-      return stringify(this);
-    };
-
-    P.valueOf = P.toJSON = function () {
-      return stringify(this, 4);
-    };
-
-    Big = _Big_();
-    Big['default'] = Big.Big = Big;
-
-    if (typeof define === 'function' && define.amd) {
-      define(function () {
-        return Big;
-      });
-    } else if (typeof module !== 'undefined' && module.exports) {
-      module.exports = Big;
-    } else {
-      GLOBAL.Big = Big;
-    }
-  })(this);
-},492,[],"big.js/big.js");
+  };
+},521,[522],"Convertable/src/actions/index.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  var CHANGE_BASE_VALUE = exports.CHANGE_BASE_VALUE = "CHANGE_BASE_VALUE";
+  var CHANGE_CATEGORY_ID = exports.CHANGE_CATEGORY_ID = "CHANGE_CATEGORY_ID";
+},522,[],"Convertable/src/actions/types.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -59526,13 +60867,11 @@ __d(function (global, require, module, exports, _dependencyMap) {
       return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = UnitDisplay.__proto__ || Object.getPrototypeOf(UnitDisplay)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
         text: _this.props.value.toString()
       }, _this._onChange = function (text) {
-        var previousText = _this.state.text;
-
         _this.setState({
           text: text
-        }, function () {
-          if (parseFloat(previousText) !== parseFloat(_this.state.text)) _this.props.onChange(text);
         });
+
+        _this.props.onChange(text);
       }, _this._onBlur = function () {
         _this.setState({
           text: _this.props.value.toString()
@@ -59558,7 +60897,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             style: [_Styles2.default.bgPrimary1],
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 40
+              lineNumber: 36
             }
           },
           _react3.default.createElement(
@@ -59567,7 +60906,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
               style: [_Styles2.default.textLarge, _Styles2.default.textNormal, styles.text],
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 41
+                lineNumber: 37
               }
             },
             this.props.title
@@ -59580,7 +60919,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             keyboardType: "numeric",
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 46
+              lineNumber: 42
             }
           })
         );
@@ -59597,7 +60936,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
   });
 
   exports.default = UnitDisplay;
-},493,[109,128,12,490],"Converter/src/components/UnitDisplay.js");
+},523,[109,128,12,519],"Convertable/src/components/UnitDisplay.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -59702,7 +61041,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
   }(_react2.PureComponent));
 
   exports.default = UnitList;
-},494,[109,128,12,495],"Converter/src/components/UnitList.js");
+},524,[109,128,12,525],"Convertable/src/components/UnitList.js");
 __d(function (global, require, module, exports, _dependencyMap) {
   Object.defineProperty(exports, "__esModule", {
     value: true
@@ -59810,7 +61149,258 @@ __d(function (global, require, module, exports, _dependencyMap) {
   });
 
   exports.default = UnitSelector;
-},495,[109,128,12,490],"Converter/src/components/UnitSelector.js");
+},525,[109,128,12,519],"Convertable/src/components/UnitSelector.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  module.exports = {
+    "categories": [{
+      "id": 0,
+      "name": "Length",
+      "items": [{
+        "id": 0,
+        "title": "Meter",
+        "ratio": 1
+      }, {
+        "id": 1,
+        "title": "Decimeter",
+        "ratio": 0.1
+      }, {
+        "id": 2,
+        "title": "Centimeter",
+        "ratio": 0.01
+      }, {
+        "id": 3,
+        "title": "Milimeter",
+        "ratio": 0.001
+      }]
+    }, {
+      "id": 1,
+      "name": "Weight",
+      "items": [{
+        "id": 0,
+        "title": "Kilogram",
+        "ratio": 1
+      }, {
+        "id": 1,
+        "title": "Gram",
+        "ratio": 0.001
+      }, {
+        "id": 2,
+        "title": "Miligram",
+        "ratio": 0.000001
+      }, {
+        "id": 3,
+        "title": "Tonne",
+        "ratio": 1000
+      }]
+    }]
+  };
+},526,[],"Convertable/src/database.json");
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _react2 = require(_dependencyMap[0], "react");
+
+  var _react3 = _interopRequireDefault(_react2);
+
+  var _index = require(_dependencyMap[1], "./../../node_modules/react-transform-hmr/lib/index.js");
+
+  var _index2 = _interopRequireDefault(_index);
+
+  var _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/containers/CategoryScreen.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _reactNative = require(_dependencyMap[2], "react-native");
+
+  var _reactRedux = require(_dependencyMap[3], "react-redux");
+
+  var _Styles = require(_dependencyMap[4], "../Styles");
+
+  var _Styles2 = _interopRequireDefault(_Styles);
+
+  var _database = require(_dependencyMap[5], "../database.json");
+
+  var _UnitSelector = require(_dependencyMap[6], "../components/UnitSelector");
+
+  var _UnitSelector2 = _interopRequireDefault(_UnitSelector);
+
+  var _index3 = require(_dependencyMap[7], "../actions/index");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var _components = {
+    CategoryScreen: {
+      displayName: "CategoryScreen"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: "/Users/ducnt/Documents/ReactNative/Converter/src/containers/CategoryScreen.js",
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var CategoryScreen = _wrapComponent("CategoryScreen")(function (_PureComponent) {
+    _inherits(CategoryScreen, _PureComponent);
+
+    function CategoryScreen() {
+      var _ref;
+
+      var _temp, _this, _ret;
+
+      _classCallCheck(this, CategoryScreen);
+
+      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+        args[_key] = arguments[_key];
+      }
+
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CategoryScreen.__proto__ || Object.getPrototypeOf(CategoryScreen)).call.apply(_ref, [this].concat(args))), _this), _this._onChangeCategoryId = function (id) {
+        return _this.props.changeCategory(id);
+      }, _this._keyExtractor = function (item) {
+        return item.id;
+      }, _this._renderItem = function (_ref2) {
+        var item = _ref2.item,
+            index = _ref2.index;
+        return _react3.default.createElement(_UnitSelector2.default, {
+          onChangeUnitId: _this._onChangeCategoryId,
+          item: {
+            title: item.name,
+            id: item.id
+          },
+          isEven: index % 2 === 0,
+          isSelected: item.id === _this.props.category,
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 22
+          }
+        });
+      }, _temp), _possibleConstructorReturn(_this, _ret);
+    }
+
+    _createClass(CategoryScreen, [{
+      key: "render",
+      value: function render() {
+        return _react3.default.createElement(
+          _reactNative.View,
+          {
+            style: {
+              flex: 1
+            },
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 31
+            }
+          },
+          _react3.default.createElement(_reactNative.Button, {
+            title: "Toggle Screen",
+            onPress: this.props.toggleScreen,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 32
+            }
+          }),
+          _react3.default.createElement(_reactNative.FlatList, {
+            style: [_Styles2.default.bgPrimary3, {
+              flex: 1
+            }],
+            data: _database.categories,
+            renderItem: this._renderItem,
+            keyExtractor: this._keyExtractor,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 33
+            }
+          })
+        );
+      }
+    }]);
+
+    return CategoryScreen;
+  }(_react2.PureComponent));
+
+  var mapAppStateToProps = function mapAppStateToProps(state) {
+    return {
+      category: state.category
+    };
+  };
+
+  var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+    return {
+      changeCategory: function changeCategory(newValue) {
+        return dispatch((0, _index3.createCategoryAction)(newValue));
+      }
+    };
+  };
+
+  exports.default = (0, _reactRedux.connect)(mapAppStateToProps, mapDispatchToProps)(CategoryScreen);
+},527,[109,128,12,490,519,526,525,521],"Convertable/src/containers/CategoryScreen.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _redux = require(_dependencyMap[0], "redux");
+
+  var _baseValueReducer = require(_dependencyMap[1], "./baseValueReducer");
+
+  var _baseValueReducer2 = _interopRequireDefault(_baseValueReducer);
+
+  var _categoryReducer = require(_dependencyMap[2], "./categoryReducer");
+
+  var _categoryReducer2 = _interopRequireDefault(_categoryReducer);
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  exports.default = reducers = (0, _redux.combineReducers)({
+    baseValue: _baseValueReducer2.default,
+    category: _categoryReducer2.default
+  });
+},528,[501,529,530],"Convertable/src/reducers/index.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _database = require(_dependencyMap[0], "../database.json");
+
+  var _types = require(_dependencyMap[1], "../actions/types");
+
+  exports.default = function () {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var action = arguments[1];
+    return action.type === _types.CHANGE_BASE_VALUE ? action.payload : state;
+  };
+},529,[526,522],"Convertable/src/reducers/baseValueReducer.js");
+__d(function (global, require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _database = require(_dependencyMap[0], "../database.json");
+
+  var _types = require(_dependencyMap[1], "../actions/types");
+
+  exports.default = categoryReducer = function categoryReducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    var action = arguments[1];
+    return action.type === "CHANGE_CATEGORY_ID" ? action.payload : state;
+  };
+},530,[526,522],"Convertable/src/reducers/categoryReducer.js");
 require(23);
 require(11);
 //# sourceMappingURL=index.map

@@ -15,12 +15,8 @@ class UnitDisplay extends PureComponent {
   }
 
   _onChange = (text) => {
-    const previousText = this.state.text;
-    this.setState({text},() => {
-      if (parseFloat(previousText) !== parseFloat(this.state.text)) (
-        this.props.onChange(text)
-      )
-    });
+    this.setState({text});
+    this.props.onChange(text);
   }
 
   _onBlur = () => {

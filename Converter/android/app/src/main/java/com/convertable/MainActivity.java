@@ -1,4 +1,4 @@
-package com.minihack2;
+package com.convertable;
 
 import com.facebook.react.ReactActivity;
 
@@ -10,6 +10,6 @@ public class MainActivity extends ReactActivity {
      */
     @Override
     protected String getMainComponentName() {
-        return "Minihack2";
+        return "Convertable";
     }
 }
