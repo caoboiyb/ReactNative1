@@ -58529,9 +58529,10 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _index2 = _interopRequireDefault(_index);
 
-  var _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/App.js";
-
   var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _this = this,
+      _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/App.js";
 
   var _reactNative = require(_dependencyMap[2], "react-native");
 
@@ -58572,19 +58573,59 @@ __d(function (global, require, module, exports, _dependencyMap) {
     };
   }
 
-  var store = (0, _redux.createStore)(_reducers2.default);
   var page = {
     CATEGORY: "CATEGORY",
     CONVERT: "CONVERT"
+  };
+
+  var persitData = function persitData(store) {
+    return function (next) {
+      return function (action) {
+        next(action);
+        asyncSaveAppState(store.getState());
+      };
+    };
+  };
+
+  var asyncSaveAppState = function asyncSaveAppState(_ref) {
+    var baseValue = _ref.baseValue,
+        category = _ref.category;
+    return regeneratorRuntime.async(function asyncSaveAppState$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            _context.prev = 0;
+            _context.next = 3;
+            return regeneratorRuntime.awrap(_reactNative.AsyncStorage.setItem("@appState", JSON.stringify({
+              baseValue: baseValue,
+              category: category
+            })));
+
+          case 3:
+            _context.next = 8;
+            break;
+
+          case 5:
+            _context.prev = 5;
+            _context.t0 = _context["catch"](0);
+            console.error(_context.t0);
+
+          case 8:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, null, _this, [[0, 5]]);
   };
 
   var App = _wrapComponent("App")(function (_PureComponent) {
     _inherits(App, _PureComponent);
 
     function App() {
-      var _ref;
+      var _ref2,
+          _this3 = this;
 
-      var _temp, _this, _ret;
+      var _temp, _this2, _ret;
 
       _classCallCheck(this, App);
 
@@ -58592,25 +58633,64 @@ __d(function (global, require, module, exports, _dependencyMap) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref, [this].concat(args))), _this), _this.state = {}, _temp), _possibleConstructorReturn(_this, _ret);
+      return _ret = (_temp = (_this2 = _possibleConstructorReturn(this, (_ref2 = App.__proto__ || Object.getPrototypeOf(App)).call.apply(_ref2, [this].concat(args))), _this2), _this2.state = {
+        isLoading: true
+      }, _this2._loadBaseValue = function _callee() {
+        var savedState;
+        return regeneratorRuntime.async(function _callee$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return regeneratorRuntime.awrap(_reactNative.AsyncStorage.getItem("@appState"));
+
+              case 2:
+                savedState = _context2.sent;
+
+                _this2.setState({
+                  isLoading: false,
+                  store: (0, _redux.createStore)(_reducers2.default, JSON.parse(savedState), (0, _redux.applyMiddleware)(persitData))
+                });
+
+              case 4:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, null, _this3);
+      }, _temp), _possibleConstructorReturn(_this2, _ret);
     }
 
     _createClass(App, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this._loadBaseValue();
+      }
+    }, {
       key: "render",
       value: function render() {
-        return _react3.default.createElement(
-          _reactRedux.Provider,
+        return this.state.isLoading ? _react3.default.createElement(
+          _reactNative.Text,
           {
-            store: store,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 30
+              lineNumber: 58
+            }
+          },
+          "Loading..."
+        ) : _react3.default.createElement(
+          _reactRedux.Provider,
+          {
+            store: this.state.store,
+            __source: {
+              fileName: _jsxFileName,
+              lineNumber: 59
             }
           },
           _react3.default.createElement(_AppNavigation.AppNavigation, {
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 31
+              lineNumber: 60
             }
           })
         );
@@ -70756,9 +70836,11 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _index2 = _interopRequireDefault(_index);
 
-  var _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/containers/ConvertScreen.js";
-
   var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _class,
+      _temp,
+      _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/containers/ConvertScreen.js";
 
   var _reactNative = require(_dependencyMap[2], "react-native");
 
@@ -70801,26 +70883,32 @@ __d(function (global, require, module, exports, _dependencyMap) {
     };
   }
 
-  var ConvertScreen = _wrapComponent("ConvertScreen")(function (_Component) {
+  var ConvertScreen = _wrapComponent("ConvertScreen")((_temp = _class = function (_Component) {
     _inherits(ConvertScreen, _Component);
 
     function ConvertScreen() {
-      var _ref;
-
-      var _temp, _this, _ret;
-
       _classCallCheck(this, ConvertScreen);
 
-      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-        args[_key] = arguments[_key];
-      }
-
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = ConvertScreen.__proto__ || Object.getPrototypeOf(ConvertScreen)).call.apply(_ref, [this].concat(args))), _this), _this.state = {
-        items: _database.categories[_this.props.category].items
-      }, _temp), _possibleConstructorReturn(_this, _ret);
+      return _possibleConstructorReturn(this, (ConvertScreen.__proto__ || Object.getPrototypeOf(ConvertScreen)).apply(this, arguments));
     }
 
     _createClass(ConvertScreen, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this.props.navigation.setParams({
+          title: _database.categories[this.props.category].name
+        });
+      }
+    }, {
+      key: "componentWillReceiveProps",
+      value: function componentWillReceiveProps(nextProps) {
+        if (_database.categories[nextProps.category].name !== _database.categories[this.props.category].name) {
+          this.props.navigation.setParams({
+            title: _database.categories[nextProps.category].name
+          });
+        }
+      }
+    }, {
       key: "render",
       value: function render() {
         return _react3.default.createElement(
@@ -70831,7 +70919,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             },
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 30
+              lineNumber: 47
             }
           },
           _react3.default.createElement(
@@ -70840,21 +70928,21 @@ __d(function (global, require, module, exports, _dependencyMap) {
               style: [_Styles2.default.bgPrimary3, _Styles2.default.container, styles.appContainer],
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 31
+                lineNumber: 48
               }
             },
             _react3.default.createElement(_ConvertColumn2.default, {
-              items: this.state.items,
+              items: _database.categories[this.props.category].items,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 32
+                lineNumber: 49
               }
             }),
             _react3.default.createElement(_ConvertColumn2.default, {
-              items: this.state.items,
+              items: _database.categories[this.props.category].items,
               __source: {
                 fileName: _jsxFileName,
-                lineNumber: 35
+                lineNumber: 52
               }
             })
           )
@@ -70863,7 +70951,22 @@ __d(function (global, require, module, exports, _dependencyMap) {
     }]);
 
     return ConvertScreen;
-  }(_react2.Component));
+  }(_react2.Component), _class.navigationOptions = function (_ref) {
+    var navigation = _ref.navigation;
+    return {
+      title: navigation.state.params ? navigation.state.params.title : "",
+      headerRight: _react3.default.createElement(_reactNative.Button, {
+        title: "Categories",
+        onPress: function onPress() {
+          return navigation.navigate("CategoryScreen");
+        },
+        __source: {
+          fileName: _jsxFileName,
+          lineNumber: 27
+        }
+      })
+    };
+  }, _temp));
 
   var styles = _reactNative.StyleSheet.create({
     appContainer: {
@@ -71502,9 +71605,11 @@ __d(function (global, require, module, exports, _dependencyMap) {
 
   var _index2 = _interopRequireDefault(_index);
 
-  var _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/containers/CategoryScreen.js";
-
   var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _class,
+      _temp2,
+      _jsxFileName = "/Users/ducnt/Documents/ReactNative/Converter/src/containers/CategoryScreen.js";
 
   var _reactNative = require(_dependencyMap[2], "react-native");
 
@@ -71549,7 +71654,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
     };
   }
 
-  var CategoryScreen = _wrapComponent("CategoryScreen")(function (_PureComponent) {
+  var CategoryScreen = _wrapComponent("CategoryScreen")((_temp2 = _class = function (_PureComponent) {
     _inherits(CategoryScreen, _PureComponent);
 
     function CategoryScreen() {
@@ -71563,15 +71668,15 @@ __d(function (global, require, module, exports, _dependencyMap) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CategoryScreen.__proto__ || Object.getPrototypeOf(CategoryScreen)).call.apply(_ref, [this].concat(args))), _this), _this._onChangeCategoryId = function (id) {
-        return _this.props.changeCategory(id);
-      }, _this._keyExtractor = function (item) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = CategoryScreen.__proto__ || Object.getPrototypeOf(CategoryScreen)).call.apply(_ref, [this].concat(args))), _this), _this._keyExtractor = function (item) {
         return item.id;
       }, _this._renderItem = function (_ref2) {
         var item = _ref2.item,
             index = _ref2.index;
         return _react3.default.createElement(_UnitSelector2.default, {
-          onChangeUnitId: _this._onChangeCategoryId,
+          onChangeUnitId: function onChangeUnitId() {
+            _this.props.changeCategory(item.id);
+          },
           item: {
             title: item.name,
             id: item.id
@@ -71580,7 +71685,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
           isSelected: item.id === _this.props.category,
           __source: {
             fileName: _jsxFileName,
-            lineNumber: 22
+            lineNumber: 24
           }
         });
       }, _temp), _possibleConstructorReturn(_this, _ret);
@@ -71597,7 +71702,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
             },
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 31
+              lineNumber: 35
             }
           },
           _react3.default.createElement(_reactNative.FlatList, {
@@ -71609,15 +71714,27 @@ __d(function (global, require, module, exports, _dependencyMap) {
             keyExtractor: this._keyExtractor,
             __source: {
               fileName: _jsxFileName,
-              lineNumber: 32
+              lineNumber: 36
             }
           })
         );
       }
+    }, {
+      key: "componentWillReceiveProps",
+      value: function componentWillReceiveProps(nextProps) {
+        if (nextProps.category !== this.props.category) {
+          this.props.navigation.goBack();
+        }
+      }
     }]);
 
     return CategoryScreen;
-  }(_react2.PureComponent));
+  }(_react2.PureComponent), _class.navigationOptions = function (_ref3) {
+    var navigation = _ref3.navigation;
+    return {
+      title: "Category Screen"
+    };
+  }, _temp2));
 
   var mapAppStateToProps = function mapAppStateToProps(state) {
     return {
@@ -71687,7 +71804,7 @@ __d(function (global, require, module, exports, _dependencyMap) {
   exports.default = categoryReducer = function categoryReducer() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
     var action = arguments[1];
-    return action.type === "CHANGE_CATEGORY_ID" ? action.payload : state;
+    return action.type === _types.CHANGE_CATEGORY_ID ? action.payload : state;
   };
 },597,[593,589],"Convertable/src/reducers/categoryReducer.js");
 require(23);

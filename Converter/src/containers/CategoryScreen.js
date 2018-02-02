@@ -12,15 +12,19 @@ import { connect } from 'react-redux';
 import globalStyles from '../Styles';
 import { categories } from '../database.json';
 import UnitSelector from '../components/UnitSelector';
-import { createCategoryAction } from '../actions/index';
+import { createCategoryAction, createChangeScreenAction } from '../actions/index';
 
 class CategoryScreen extends PureComponent {
-  _onChangeCategoryId = id => this.props.changeCategory(id);
+  static navigationOptions = ({ navigation }) => ({
+    title: "Category Screen",
+  })
 
   _keyExtractor = item => item.id;
 
   _renderItem = ({ item, index }) => (<UnitSelector
-    onChangeUnitId={this._onChangeCategoryId}
+    onChangeUnitId={() => {
+      this.props.changeCategory(item.id)
+    }}
     item={{ title: item.name, id: item.id }}
     isEven={index % 2 === 0}
     isSelected={item.id === this.props.category}
@@ -37,6 +41,12 @@ class CategoryScreen extends PureComponent {
         />
       </View>
     );
+  }
+
+  componentWillReceiveProps(nextProps){
+    if (nextProps.category !== this.props.category){
+      this.props.navigation.goBack()
+    }
   }
 }
 

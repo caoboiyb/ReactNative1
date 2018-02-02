@@ -1,6 +1,7 @@
 import { 
   CHANGE_BASE_VALUE,
-  CHANGE_CATEGORY_ID
+  CHANGE_CATEGORY_ID,
+  CHANGE_SCREEN
  } from './types';
 
 export const createBaseValueAction = newValue => ({

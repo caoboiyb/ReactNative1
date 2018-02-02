@@ -21,8 +21,25 @@ import { categories } from '../database.json';
 import { connect } from 'react-redux';
 
 class ConvertScreen extends Component {
-  state = {
-    items: categories[this.props.category].items
+  static navigationOptions = ({ navigation }) => ({
+    title: navigation.state.params ? navigation.state.params.title : "",
+    headerRight: (
+      <Button title="Categories" onPress={() => navigation.navigate("CategoryScreen")} />
+    )
+  })
+
+  componentDidMount() {
+    this.props.navigation.setParams({
+      title: categories[this.props.category].name
+    })
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (categories[nextProps.category].name !== categories[this.props.category].name){
+      this.props.navigation.setParams({
+        title: categories[nextProps.category].name
+      })
+    }
   }
 
   render() {
@@ -30,10 +47,10 @@ class ConvertScreen extends Component {
       <View style={{ flex: 1 }}>
         <View style={[globalStyles.bgPrimary3, globalStyles.container, styles.appContainer]}>
           <ConvertColumn
-            items={this.state.items}
+            items={categories[this.props.category].items}
           />
           <ConvertColumn
-            items={this.state.items}
+            items={categories[this.props.category].items}
           />
         </View>
       </View>
