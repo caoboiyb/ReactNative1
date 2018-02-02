@@ -28,7 +28,6 @@ class ConvertScreen extends Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Button title="Toggle Screen" onPress={this.props.toggleScreen} />
         <View style={[globalStyles.bgPrimary3, globalStyles.container, styles.appContainer]}>
           <ConvertColumn
             items={this.state.items}
@@ -44,7 +43,6 @@ class ConvertScreen extends Component {
 
 const styles = StyleSheet.create({
   appContainer: {
-    paddingTop: 20,
     flexDirection: "row"
   }
 });

@@ -29,7 +29,6 @@ class CategoryScreen extends PureComponent {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <Button title="Toggle Screen" onPress={this.props.toggleScreen} />
         <FlatList
           style={[globalStyles.bgPrimary3, { flex: 1 }]}
           data={categories}

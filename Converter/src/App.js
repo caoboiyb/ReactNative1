@@ -9,8 +9,7 @@ import {
 import { Provider, connect } from 'react-redux';
 import { createStore } from 'redux';
 
-import ConvertScreen from './containers/ConvertScreen';
-import CategoryScreen from './containers/CategoryScreen';
+import { AppNavigation } from './AppNavigation'
 
 import reducers from './reducers/';
 
@@ -23,20 +22,13 @@ const page = {
 
 class App extends PureComponent {
   state = {
-    currentPage: page.CONVERT
-  }
 
-  _goToCategoryScreen = () => this.setState({ currentPage: page.CATEGORY })
-  _goToConvertScreen = () => this.setState({ currentPage: page.CONVERT })
+  }
 
   render() {
     return (
       <Provider store={store}>
-        {
-          this.state.currentPage === page.CONVERT
-            ? <ConvertScreen toggleScreen={this._goToCategoryScreen} />
-            : <CategoryScreen toggleScreen={this._goToConvertScreen} />
-        }
+        <AppNavigation />
       </Provider>
     );
   }
