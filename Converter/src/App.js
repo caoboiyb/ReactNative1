@@ -24,9 +24,11 @@ const persitData = store => next => action => {
   asyncSaveAppState(store.getState())
 }
 
-const asyncSaveAppState = async ({ baseValue, category }) => {
+const asyncSaveAppState = async ({ baseValue, category, leftUnit, rightUnit }) => {
   try {
-    await AsyncStorage.setItem("@appState", JSON.stringify({ baseValue, category }))
+    await AsyncStorage.setItem(
+      "@appState",
+      JSON.stringify({ baseValue, category, leftUnit, rightUnit }))
   } catch (err) {
     console.error(err)
   }

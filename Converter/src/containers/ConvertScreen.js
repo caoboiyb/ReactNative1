@@ -48,9 +48,11 @@ class ConvertScreen extends Component {
         <View style={[globalStyles.bgPrimary3, globalStyles.container, styles.appContainer]}>
           <ConvertColumn
             items={categories[this.props.category].items}
+            id={0}
           />
           <ConvertColumn
             items={categories[this.props.category].items}
+            id={1}
           />
         </View>
       </View>

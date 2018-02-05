@@ -1,7 +1,8 @@
 import { 
   CHANGE_BASE_VALUE,
   CHANGE_CATEGORY_ID,
-  CHANGE_SCREEN
+  CHANGE_LEFT_UNIT,
+  CHANGE_RIGHT_UNIT
  } from './types';
 
 export const createBaseValueAction = newValue => ({
@@ -12,4 +13,14 @@ export const createBaseValueAction = newValue => ({
 export const createCategoryAction = newCategory => ({
   type: CHANGE_CATEGORY_ID,
   payload: newCategory
+})
+
+export const createLeftUnitAction = newUnit => ({
+  type:CHANGE_LEFT_UNIT,
+  payload: newUnit
+})
+
+export const createRightUnitAction = newUnit => ({
+  type:CHANGE_RIGHT_UNIT,
+  payload: newUnit
 })

@@ -1,4 +1,3 @@
-import { categories } from '../database.json';
 import { CHANGE_CATEGORY_ID } from '../actions/types'
 
 export default categoryReducer = (state = 0, action) => {
